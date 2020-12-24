@@ -16,10 +16,11 @@ export type task = [
         answer_type: number,
         description: string,
         answer: null,
+        image: string | null
         difficulty: number,
         position: number,
         is_solved: boolean,
-        attempts: 1,
-        "attempts_remains": 1
+        attempts: number,
+        attempts_remains: 0 | 1 | 2
     },
 ]
