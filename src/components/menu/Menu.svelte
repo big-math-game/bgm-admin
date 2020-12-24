@@ -1,7 +1,13 @@
 <script>
   import menu from './menu';
 
-  export let segment;
+  export let segment = '';
+  const getUrl = (url) => {
+    if (!url) {
+      return '/'
+    }
+    return url
+  }
 </script>
 
 <aside class="column is-2 aside">
@@ -13,7 +19,7 @@
       </p>
       <ul class="menu-list">
         {#each item.links as list (list.id)}
-          <li><a href={list.link} rel=prefetch class={segment === list.link ? 'is-active' : ''}>{list.name}</a></li>
+          <li><a href={list.link} rel=prefetch class={getUrl(segment) === list.link ? 'is-active' : ''}>{list.name}</a></li>
         {/each}
       </ul>
     {/each}

@@ -1,7 +1,7 @@
 const Menu = [
   {
     id: 'GENERAL',
-    label: 'GENERAL',
+    label: 'Menu',
     links: [
       {
         id: 'Dashboard',
