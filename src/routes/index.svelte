@@ -2,13 +2,13 @@
   import { onMount } from 'svelte'
 
   let tasksData = []
-  let topicsData = []
+  let themeData = []
 
   let date = new Date().toISOString().split('T')[1].split('.')[0]
 
   onMount(() => {
     tasksData = JSON.parse(localStorage.getItem('task'))
-    topicsData = JSON.parse(localStorage.getItem('topic'))
+    themeData = JSON.parse(localStorage.getItem('theme'))
 
     setInterval(() => {
       date = new Date().toISOString().split('T')[1].split('.')[0]
@@ -47,17 +47,17 @@
       <div class="column">
         <div class="box notification">
           <div class="title">Topic</div>
-          {#if topicsData !== null}
+          {#if themeData !== null}
             <div class="select mb-3">
               <label>
                 <select
                   bind:value="{topic}"
-                  on:blur="{() => {
-                    filteredTasks = [...tasksData.filter((task) => task.topic === topic)]
+                  on:change="{() => {
+                    filteredTasks = [...tasksData.filter((task) => task.theme_id === topic)]
                   }}">
                   <option selected disabled></option>
-                  {#each topicsData as topic (topic.id)}
-                    <option value="{topic.topic}">{topic.topic}</option>
+                  {#each themeData as topic (topic.id)}
+                    <option value="{topic.id}">{topic.theme}</option>
                   {/each}
                 </select>
               </label>
@@ -74,19 +74,19 @@
             <div class="level-item">
               <div>
                 <div class="heading">Easy task</div>
-                <div class="title is-5">{filteredTasks.filter((task) => task.complexity === 'easy').length}</div>
+                <div class="title is-5">{filteredTasks.filter((task) => task.difficulty === 0).length}</div>
               </div>
             </div>
             <div class="level-item">
               <div>
                 <div class="heading">Normal task</div>
-                <div class="title is-5">{filteredTasks.filter((task) => task.complexity === 'medium').length}</div>
+                <div class="title is-5">{filteredTasks.filter((task) => task.difficulty === 1).length}</div>
               </div>
             </div>
             <div class="level-item">
               <div>
                 <div class="heading">Hard task</div>
-                <div class="title is-5">{filteredTasks.filter((task) => task.complexity === 'hard').length}</div>
+                <div class="title is-5">{filteredTasks.filter((task) => task.difficulty === 2).length}</div>
               </div>
             </div>
           </div>
