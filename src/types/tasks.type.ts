@@ -9,18 +9,16 @@ export type taskList = [
     },
 ]
 
-export type task = [
-    {
+ export type task = {
         id: string,
         theme_id: string,
         answer_type: number,
         description: string,
-        answer: null,
-        image: string | null
+        answer: string,
+        image?: string | null
         difficulty: number,
         position: number,
         is_solved: boolean,
         attempts: number,
         attempts_remains: 0 | 1 | 2
-    },
-]
+    }
