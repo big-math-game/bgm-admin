@@ -3,65 +3,60 @@
   import Complexity from '../mocks/_complexity';
   import { joinCssClasses } from '../utils/utils';
   import {onMount} from "svelte";
+  import Id from "../services/randomUID.ts";
+  import type { task } from "../types/tasks.type";
 
-  let topicsData = []
+  let themeData = []
   let tasksData = []
+  let active: boolean = false;
 
-  onMount(() => {
-      tasksData = JSON.parse(localStorage.getItem('task'));
-      topicsData = JSON.parse(localStorage.getItem('topic'));
-  })
-
-  let active = false;
-
-  function getRandomIntInclusive (min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
-  }
-
-  const randomID = `${getRandomIntInclusive(1, 10000000)}-${getRandomIntInclusive(1, 100000000)}`;
-
-  let id = randomID;
-  let topic = '';
-  let complexity = 'easy';
-  let listNumber = '1';
-  let task = '';
-  let image = '';
-  let video = '';
-  let answerOptions = [];
-  let taskHint = '';
+  let id: string = Id()
+  let theme: string = '';
+  let difficulty = 0;
+  let position: number = 0;
+  let description: string = '';
+  let image: string = '';
+  // let answerOptions = [];
+  // let taskHint = '';
   let answer = '';
-  let solution = '';
+  // let solution = '';
+
+  $: disabled = !theme && !description && !answer
+
+  const createTask = (id: string, theme: string, description: string, image: string, difficulty: number, position: number, answer: string): task => {
+      return {
+          id: id,
+          theme_id: theme,
+          answer_type: 0,
+          description: description,
+          answer: answer,
+          image: image ? image : null,
+          difficulty: difficulty,
+          position: position,
+          is_solved: false,
+          attempts: 0,
+          attempts_remains: 2
+      }
+  }
 
   const submitHandler = () => {
     if (tasksData) {
-      localStorage.setItem('task', JSON.stringify([
-        ...tasksData,
-        { id, topic, complexity, listNumber, task, image, video, answerOptions, taskHint, answer, solution }]));
-    } else (
-      localStorage.setItem('task', JSON.stringify([
-        {
-          id: id,
-          topic: topic,
-          complexity: complexity,
-          listNumber: listNumber,
-          task: task,
-          image: image,
-          video: video,
-          answerOptions: answerOptions,
-          taskHint: taskHint,
-          answer: answer,
-          solution: solution,
-        }]))
-    );
+      localStorage.setItem('task', JSON.stringify([...tasksData, createTask(id, theme, description, image, difficulty, position, answer)]));
+    } else {
+        localStorage.setItem('task', JSON.stringify([createTask(id, theme, description, image, difficulty, position, answer)]))
+    }
     goto('/tasks');
   };
 
-  let fields = [{ id: '1' }, { id: '2' }];
-  const handleClick = () => {
-    fields = [...fields, { id: randomID }];
-  };
+  // let fields = [{ id: '1' }, { id: '2' }];
+  // const handleClick = () => {
+  //   fields = [...fields, { id: id }];
+  // };
+
+  onMount(() => {
+      themeData = JSON.parse(localStorage.getItem('theme'));
+      tasksData = JSON.parse(localStorage.getItem('task'));
+  })
 </script>
 
 <svelte:head>
@@ -77,11 +72,11 @@
         <label class="label" for="topic">Select topic</label>
         <div class="control">
           <div class="select">
-            <select id="topic" name="topic" bind:value={topic} required>
-              {#if topicsData}
+            <select id="topic" name="topic" bind:value={theme} required>
+              {#if themeData}
                 <option selected disabled></option>
-                {#each topicsData as topic (topic.id)}
-                  <option value={topic.topic}>{topic.topic}</option>
+                {#each themeData as theme (theme.id)}
+                  <option value={theme.id}>{theme.theme}</option>
                 {/each}
               {:else}
                 <option disabled>add topic</option>
@@ -99,15 +94,15 @@
         <div class="field has-addons">
           <div class="control">
             <input id="addTopic" name="answerOptions" class="input " placeholder="placeholder" type="text"
-                   bind:value={topic}>
+                   bind:value={theme}>
           </div>
           <div class="control">
-            <a class="button is-success"
-               on:click|preventDefault={()=>{localStorage.setItem('topic', JSON.stringify(
-                 topicsData === null ? [{ id: randomID, topic: topic }] :
-                  [...topicsData, { id: randomID, topic: topic }])); active=!active; topicsData = JSON.parse(localStorage.getItem('topic'))}}>
+            <div class="button is-success"
+               on:click|preventDefault={()=>{localStorage.setItem('theme', JSON.stringify(
+                 themeData === null ? [{ id: id, theme: theme }] :
+                  [...themeData, { id: id, theme: theme }])); active=!active; themeData = JSON.parse(localStorage.getItem('theme'))}}>
               save
-            </a>
+            </div>
           </div>
         </div>
       </div>
@@ -119,9 +114,9 @@
       <label class="label" for="complexity">Select complexity</label>
       <div class="control">
         <div class="select">
-          <select id="complexity" name="complexity" bind:value={complexity}>
+          <select id="complexity" name="complexity" bind:value={difficulty}>
             {#each Complexity as ComplexityItem (ComplexityItem.id)}
-              <option value={ComplexityItem.id}>{ComplexityItem.id}</option>
+              <option value={ComplexityItem.value}>{ComplexityItem.name}</option>
             {/each}
           </select>
         </div>
@@ -133,10 +128,16 @@
       <label class="label" for="listNumber">Select list number</label>
       <div class="control">
         <div class="select">
-          <select id="listNumber" name="listNumber" bind:value={listNumber}>
+          <select id="listNumber" name="listNumber" bind:value={position}>
+            <option>0</option>
             <option>1</option>
             <option>2</option>
             <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
           </select>
         </div>
       </div>
@@ -144,14 +145,13 @@
 
     <!-- Textarea -->
     <div class="field mb-5">
-      <label class="label" for="task">Enter task</label>
+      <label class="label" for="task">Enter description</label>
       <div class="control">
-        <textarea class="textarea" id="task" name="task" bind:value={task} required></textarea>
+        <textarea class="textarea" id="task" name="task" bind:value={description} required></textarea>
       </div>
     </div>
 
     <!-- File Button -->
-
     <label class="label" for="imageFile">Added image</label>
     <div class="file">
       <label class="file-label">
@@ -167,25 +167,8 @@
     </span>
       </label>
     </div>
-    <!-- File Button -->
 
-    <label class="label">Added video</label>
-    <div class="file mb-5">
-      <label class="file-label">
-        <input class="file-input" type="file" name="videoFile" bind:files={video}
-               onchange="if (this.files.length > 0) document.getElementById('filename-videoFile').innerHTML = this.files[0].name; video = this.files[0]">
-        <span class="file-cta">
-      <span class="file-icon">
-        <i class="fa fa-upload"></i>
-      </span>
-      <span class="file-label" id="filename-videoFile">
-        Choose a file…
-      </span>
-    </span>
-      </label>
-    </div>
-
-    <!-- Prepended text-->
+    <!-- Prepended text
     <label class="label" for="answerOptions">Answer options</label>
     {#each fields as field, i (field.id)}
       <div class="field has-addons">
@@ -205,14 +188,16 @@
       <p class="help mb-3">Add answer options from two or more</p>
     {/each}
     <button class="button is-primary mb-5" on:click|preventDefault={handleClick}>Add answer option</button>
+     -->
 
-    <!-- Textarea -->
+    <!-- Textarea
     <div class="field">
       <label class="label" for="taskHint">Task hint</label>
       <div class="control">
         <textarea class="textarea" id="taskHint" name="solution" bind:value={taskHint}></textarea>
       </div>
     </div>
+    -->
 
     <!-- Text input-->
     <div class="field mb-5">
@@ -224,20 +209,21 @@
       </div>
     </div>
 
-    <!-- Textarea -->
+    <!-- Textarea
     <div class="field mb-5">
       <label class="label" for="solution">Solution</label>
       <div class="control">
         <textarea class="textarea" id="solution" name="solution" bind:value={solution}></textarea>
       </div>
     </div>
+    -->
 
     <!-- Button -->
     <div class="field mb-5">
       <label class="label" for="submit"></label>
       <div class="control">
         <button id="submit" name="submit" type="submit" class="button is-success"
-                disabled={topicsData === null}>{ topicsData === null ? "Add topic" : "submit"}</button>
+                {disabled}>{ themeData === null ? "Add topic" : "submit"}</button>
       </div>
     </div>
 

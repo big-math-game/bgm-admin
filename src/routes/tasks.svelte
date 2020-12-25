@@ -2,29 +2,16 @@
     import Complexity from '../mocks/_complexity';
     import {onMount} from 'svelte';
 
-    let topicsData = []
+    let themeData = []
     let tasksData = []
 
+    let difficulty = 0;
+    let topic: string = 'all';
+
     onMount(() => {
+        themeData = JSON.parse(localStorage.getItem('theme'));
         tasksData = JSON.parse(localStorage.getItem('task'));
-        topicsData = JSON.parse(localStorage.getItem('topic'));
     })
-
-    let active = false;
-
-    const handleChange = () => {
-        active = !active;
-    };
-
-    let complexity = 'easy';
-    let topic;
-
-    // import Tasks from '../../mocks/_tasks';
-    // import Topic from '../../mocks/_topics';
-    //
-    // localStorage.setItem('task', JSON.stringify(Tasks));
-    // localStorage.setItem('topic', JSON.stringify(Topic));
-
 </script>
 
 <svelte:head>
@@ -38,13 +25,13 @@
     <div class="level-left">
       <div class="level-item">
 
-        {#if topicsData}
+        {#if themeData}
           <div class="select">
             <label>
               <select bind:value={topic}>
                 <option value='all' selected>all</option>
-                {#each topicsData as topic (topic.id)}
-                  <option value={topic.topic}>{topic.topic}</option>
+                {#each themeData as topic (topic.id)}
+                  <option value={topic.id}>{topic.theme}</option>
                 {/each}
               </select>
             </label>
@@ -65,7 +52,7 @@
   <div class="tabs">
     <ul>
       {#each Complexity as item (item.id)}
-        <li class={item.id === complexity ? 'is-active' : '' } on:click={()=> complexity = item.id}><a>{item.name}</a>
+        <li class={item.value === difficulty ? 'is-active' : '' } on:click={()=> difficulty = item.value}><a>{item.name}</a>
         </li>
       {/each}
     </ul>
@@ -77,68 +64,39 @@
     <table class="table is-bordered">
       <thead>
       <tr>
-        <th><abbr title="Topic">Topic</abbr></th>
-        <th><abbr title="Complexity">Complexity</abbr></th>
-        <th><abbr title="List Number">LN</abbr></th>
-        <th><abbr title="Task">Task</abbr></th>
+        <!-- <th><abbr title="Topic">Topic</abbr></th>-->
+        <th><abbr title="Id">Id</abbr></th>
+        <th><abbr title="Theme">Theme</abbr></th>
+        <th><abbr title="Complexity">Difficulty</abbr></th>
+        <th><abbr title="Position">Position</abbr></th>
+        <th><abbr title="Description">Description</abbr></th>
         <th><abbr title="Image">Image</abbr></th>
-        <th><abbr title="Video">Video</abbr></th>
-        <th><abbr title="Answer options">Answer options</abbr></th>
-        <th><abbr title="Task hint">Task hint</abbr></th>
         <th><abbr title="Answer">Answer</abbr></th>
-        <th><abbr title="Solution">Solution</abbr></th>
       </tr>
       </thead>
 
       {#if tasksData }
         <tbody>
         {#each tasksData as task, i (task.id)}
-          {#if task.complexity === complexity && task.topic === topic || topic === 'all' && task.complexity ===
-          complexity}
+          {#if (task.difficulty === difficulty && task.theme_id === topic) || (topic === 'all' && task.difficulty === difficulty)}
             <tr>
-              {#if task.topic}
-                <th>{task.topic}</th>
-              {/if}
-              {#if task.complexity}
-                <th>{task.complexity}</th>
-              {/if}
-              {#if task.listNumber}
-                <th>{task.listNumber}</th>
-              {/if}
-              {#if task.task}
-                <th>{task.task}</th>
-              {/if}
-              {#if task.image}
+              <!--{#if task.topic}-->
+              <!--  <th>{task.topic}</th>-->
+              <!--{/if}-->
+              <th>{task.id}</th>
+              <th>{themeData.find(theme => theme.id === task.theme_id).theme}</th>
+              <th>{task.difficulty}</th>
+              <th>{task.position}</th>
+              <th>{task.description}</th>
+              {#if task.image !== undefined}
                 <th>{task.image}</th>
-              {:else}
-                <th></th>
               {/if}
-              {#if task.video}
-                <th>{task.video}</th>
-              {:else}
-                <th></th>
-              {/if}
-              {#if task.answerOptions.length > 0}
-                <th>{task.answerOptions}</th>
-              {/if}
-              {#if task.taskHint}
-                <th>{task.taskHint}</th>
-              {:else}
-                <th></th>
-              {/if}
-              {#if task.answer}
-                <th>{task.answer}</th>
-              {/if}
-              {#if task.solution}
-                <th>{task.solution}</th>
-              {:else}
-                <th></th>
-              {/if}
-              <span class="button is-danger button-delete is-small ml-2 mt-1"
+              <th>{task.answer}</th>
+              <td class="button is-danger button-delete is-small ml-2 mt-1"
                       on:click={
                   ()=>{
                     tasksData.splice(i, 1);
-                    tasksData=tasksData;
+                    tasksData = [...tasksData];
                     localStorage.setItem('task', JSON.stringify(tasksData));
                   }
                   }
@@ -146,7 +104,7 @@
                 <span class="icon">
                 <i class="fas fa-times"></i>
             </span>
-              </span>
+              </td>
             </tr>
           {/if}
         {/each}
@@ -166,5 +124,13 @@
         .table td, .table th {
             font-size: 15px;
         }
+    }
+
+    .table td {
+        min-width: 40px;
+    }
+
+    abbr {
+        text-decoration: none;
     }
 </style>
