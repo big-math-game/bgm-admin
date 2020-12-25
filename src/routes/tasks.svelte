@@ -46,7 +46,9 @@
   <div class="tabs">
     <ul>
       {#each Complexity as item (item.id)}
-        <li class="{item.value === difficulty ? 'is-active' : ''}" on:click="{() => (difficulty = item.value)}"><a>{item.name}</a></li>
+        <li class="{item.value === difficulty ? 'is-active' : ''}" on:click|preventDefault="{() => (difficulty = item.value)}">
+          <a href=".">{item.name}</a>
+        </li>
       {/each}
     </ul>
   </div>

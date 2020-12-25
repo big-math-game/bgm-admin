@@ -6,8 +6,6 @@
 
   let date = new Date().toISOString().split('T')[1].split('.')[0]
 
-  function time() {}
-
   onMount(() => {
     tasksData = JSON.parse(localStorage.getItem('task'))
     topicsData = JSON.parse(localStorage.getItem('topic'))
