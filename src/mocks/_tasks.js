@@ -10,7 +10,7 @@ const Tasks = [
     answerOptions: ['3', '2', '0'],
     taskHint: 'Число между 1 и 3',
     answer: '2',
-    solution: 'Если к единице прибавить вторую единицу получится два',
+    solution: 'Если к единице прибавить вторую единицу получится два'
   },
   {
     id: '2',
@@ -23,7 +23,7 @@ const Tasks = [
     answerOptions: ['10', '5', '6'],
     taskHint: 'столько пальцев на руке?',
     answer: '10',
-    solution: 'Если к пяти прибавить пять получится десять',
+    solution: 'Если к пяти прибавить пять получится десять'
   },
   {
     id: '3',
@@ -36,7 +36,7 @@ const Tasks = [
     answerOptions: ['125', '132', '111'],
     taskHint: 'три раза по единице?',
     answer: '111',
-    solution: 'Восемь плюс тридцать два получится сорок. Сорок плюс семьдесят один получится сто одиннадцать',
+    solution: 'Восемь плюс тридцать два получится сорок. Сорок плюс семьдесят один получится сто одиннадцать'
   },
   {
     id: '4',
@@ -49,7 +49,7 @@ const Tasks = [
     answerOptions: ['6845', '2565', '1211'],
     taskHint: '',
     answer: '1211',
-    solution: '',
+    solution: ''
   },
   {
     id: '5',
@@ -62,7 +62,7 @@ const Tasks = [
     answerOptions: ['1', '5', '7'],
     taskHint: '',
     answer: '1',
-    solution: '',
+    solution: ''
   },
   {
     id: '6',
@@ -75,7 +75,7 @@ const Tasks = [
     answerOptions: ['2', '6', '4'],
     taskHint: '',
     answer: '6',
-    solution: '',
+    solution: ''
   },
   {
     id: '7',
@@ -88,7 +88,7 @@ const Tasks = [
     answerOptions: ['12', '10', '20'],
     taskHint: '',
     answer: '12',
-    solution: '',
+    solution: ''
   },
   {
     id: '8',
@@ -101,8 +101,8 @@ const Tasks = [
     answerOptions: ['626', '524', '843'],
     taskHint: '',
     answer: '12',
-    solution: '',
-  },
-];
+    solution: ''
+  }
+]
 
-export default Tasks;
+export default Tasks

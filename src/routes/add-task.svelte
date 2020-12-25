@@ -1,52 +1,52 @@
 <script lang="ts">
-  import { goto } from '@sapper/app.mjs';
-  import Complexity from '../mocks/_complexity';
-  import { joinCssClasses } from '../utils/utils';
-  import {onMount} from "svelte";
-  import Id from "../services/randomUID.ts";
-  import type { task } from "../types/tasks.type";
+  import { goto } from '@sapper/app.mjs'
+  import Complexity from '../mocks/_complexity'
+  import { joinCssClasses } from '../utils/utils'
+  import { onMount } from 'svelte'
+  import Id from '../services/randomUID.ts'
+  import type { task } from '../types/tasks.type'
 
   let themeData = []
   let tasksData = []
-  let active: boolean = false;
+  let active: boolean = false
 
   let id: string = Id()
-  let theme: string = '';
-  let difficulty = 0;
-  let position: number = 0;
-  let description: string = '';
-  let image: string = '';
+  let theme: string = ''
+  let difficulty = 0
+  let position: number = 0
+  let description: string = ''
+  let image: string = ''
   // let answerOptions = [];
   // let taskHint = '';
-  let answer = '';
+  let answer = ''
   // let solution = '';
 
   $: disabled = !theme && !description && !answer
 
   const createTask = (id: string, theme: string, description: string, image: string, difficulty: number, position: number, answer: string): task => {
-      return {
-          id: id,
-          theme_id: theme,
-          answer_type: 0,
-          description: description,
-          answer: answer,
-          image: image ? image : null,
-          difficulty: difficulty,
-          position: position,
-          is_solved: false,
-          attempts: 0,
-          attempts_remains: 2
-      }
+    return {
+      id: id,
+      theme_id: theme,
+      answer_type: 0,
+      description: description,
+      answer: answer,
+      image: image ? image : null,
+      difficulty: difficulty,
+      position: position,
+      is_solved: false,
+      attempts: 0,
+      attempts_remains: 2
+    }
   }
 
   const submitHandler = () => {
     if (tasksData) {
-      localStorage.setItem('task', JSON.stringify([...tasksData, createTask(id, theme, description, image, difficulty, position, answer)]));
+      localStorage.setItem('task', JSON.stringify([...tasksData, createTask(id, theme, description, image, difficulty, position, answer)]))
     } else {
-        localStorage.setItem('task', JSON.stringify([createTask(id, theme, description, image, difficulty, position, answer)]))
+      localStorage.setItem('task', JSON.stringify([createTask(id, theme, description, image, difficulty, position, answer)]))
     }
-    goto('/tasks');
-  };
+    goto('/tasks')
+  }
 
   // let fields = [{ id: '1' }, { id: '2' }];
   // const handleClick = () => {
@@ -54,8 +54,8 @@
   // };
 
   onMount(() => {
-      themeData = JSON.parse(localStorage.getItem('theme'));
-      tasksData = JSON.parse(localStorage.getItem('task'));
+    themeData = JSON.parse(localStorage.getItem('theme'))
+    tasksData = JSON.parse(localStorage.getItem('task'))
   })
 </script>
 
@@ -63,44 +63,43 @@
   <title>Add tasks</title>
 </svelte:head>
 
-<form class="form-horizontal" enctype="multipart/form-data" on:submit|preventDefault={submitHandler}>
+<form class="form-horizontal" enctype="multipart/form-data" on:submit|preventDefault="{submitHandler}">
   <fieldset class="fieldset mr-2">
-
     <!-- Select Basic -->
     <div class="field is-horizontal">
       <div class="field">
         <label class="label" for="topic">Select topic</label>
         <div class="control">
           <div class="select">
-            <select id="topic" name="topic" bind:value={theme} required>
+            <select id="topic" name="topic" bind:value="{theme}" required>
               {#if themeData}
                 <option selected disabled></option>
                 {#each themeData as theme (theme.id)}
-                  <option value={theme.id}>{theme.theme}</option>
+                  <option value="{theme.id}">{theme.theme}</option>
                 {/each}
               {:else}
                 <option disabled>add topic</option>
               {/if}
             </select>
           </div>
-          {#if !active}
-            <button class="button is-primary" on:click|preventDefault={()=> active = !active}>Add topic</button>
-          {/if}
+          {#if !active}<button class="button is-primary" on:click|preventDefault="{() => (active = !active)}">Add topic</button>{/if}
         </div>
       </div>
 
-      <div class={ joinCssClasses("field", !active ? "is-invisible" : "") }>
+      <div class="{joinCssClasses('field', !active ? 'is-invisible' : '')}">
         <label class="label" for="addTopic">Add topic</label>
         <div class="field has-addons">
           <div class="control">
-            <input id="addTopic" name="answerOptions" class="input " placeholder="placeholder" type="text"
-                   bind:value={theme}>
+            <input id="addTopic" name="answerOptions" class="input " placeholder="placeholder" type="text" bind:value="{theme}" />
           </div>
           <div class="control">
-            <div class="button is-success"
-               on:click|preventDefault={()=>{localStorage.setItem('theme', JSON.stringify(
-                 themeData === null ? [{ id: id, theme: theme }] :
-                  [...themeData, { id: id, theme: theme }])); active=!active; themeData = JSON.parse(localStorage.getItem('theme'))}}>
+            <div
+              class="button is-success"
+              on:click|preventDefault="{() => {
+                localStorage.setItem('theme', JSON.stringify(themeData === null ? [{ id: id, theme: theme }] : [...themeData, { id: id, theme: theme }]))
+                active = !active
+                themeData = JSON.parse(localStorage.getItem('theme'))
+              }}">
               save
             </div>
           </div>
@@ -108,15 +107,14 @@
       </div>
     </div>
 
-
     <!-- Select Basic -->
     <div class="field mb-5">
       <label class="label" for="complexity">Select complexity</label>
       <div class="control">
         <div class="select">
-          <select id="complexity" name="complexity" bind:value={difficulty}>
+          <select id="complexity" name="complexity" bind:value="{difficulty}">
             {#each Complexity as ComplexityItem (ComplexityItem.id)}
-              <option value={ComplexityItem.value}>{ComplexityItem.name}</option>
+              <option value="{ComplexityItem.value}">{ComplexityItem.name}</option>
             {/each}
           </select>
         </div>
@@ -128,7 +126,7 @@
       <label class="label" for="listNumber">Select list number</label>
       <div class="control">
         <div class="select">
-          <select id="listNumber" name="listNumber" bind:value={position}>
+          <select id="listNumber" name="listNumber" bind:value="{position}">
             <option>0</option>
             <option>1</option>
             <option>2</option>
@@ -146,25 +144,24 @@
     <!-- Textarea -->
     <div class="field mb-5">
       <label class="label" for="task">Enter description</label>
-      <div class="control">
-        <textarea class="textarea" id="task" name="task" bind:value={description} required></textarea>
-      </div>
+      <div class="control"><textarea class="textarea" id="task" name="task" bind:value="{description}" required></textarea></div>
     </div>
 
     <!-- File Button -->
     <label class="label" for="imageFile">Added image</label>
     <div class="file">
       <label class="file-label">
-        <input id="imageFile" class="file-input" type="file" name="imageFile" bind:files={image}
-               onchange="if (this.files.length > 0) document.getElementById('filename-imageFile').innerHTML = this.files[0].name; image = this.files[0]">
+        <input
+          id="imageFile"
+          class="file-input"
+          type="file"
+          name="imageFile"
+          bind:files="{image}"
+          onchange="if (this.files.length > 0) document.getElementById('filename-imageFile').innerHTML = this.files[0].name; image = this.files[0]" />
         <span class="file-cta">
-      <span class="file-icon">
-        <i class="fa fa-upload"></i>
-      </span>
-      <span class="file-label" id="filename-imageFile">
-        Choose a file…
-      </span>
-    </span>
+          <span class="file-icon"> <i class="fa fa-upload"></i> </span>
+          <span class="file-label" id="filename-imageFile"> Choose a file… </span>
+        </span>
       </label>
     </div>
 
@@ -203,8 +200,7 @@
     <div class="field mb-5">
       <label class="label" for="answer">Answer</label>
       <div class="control">
-        <input id="answer" name="answer" type="text" placeholder="placeholder" class="input" bind:value={answer}
-               required>
+        <input id="answer" name="answer" type="text" placeholder="placeholder" class="input" bind:value="{answer}" required />
         <p class="help">Add answer</p>
       </div>
     </div>
@@ -222,22 +218,25 @@
     <div class="field mb-5">
       <label class="label" for="submit"></label>
       <div class="control">
-        <button id="submit" name="submit" type="submit" class="button is-success"
-                {disabled}>{ themeData === null ? "Add topic" : "submit"}</button>
+        <button
+          id="submit"
+          name="submit"
+          type="submit"
+          class="button is-success"
+          disabled="{disabled}">{themeData === null ? 'Add topic' : 'submit'}</button>
       </div>
     </div>
-
   </fieldset>
 </form>
 
 <style>
-    .fieldset {
-        padding: 0;
-    }
+  .fieldset {
+    padding: 0;
+  }
 
-    @media (min-width: 1025px) {
-        .fieldset {
-            padding: 0 300px 0 0;
-        }
+  @media (min-width: 1025px) {
+    .fieldset {
+      padding: 0 300px 0 0;
     }
+  }
 </style>

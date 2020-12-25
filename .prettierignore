@@ -1,0 +1,12 @@
+.prettierrc.js
+.gitignore
+.idea
+.vscode
+package.json
+package-lock.json
+tsconfig.json
+README.md
+
+__sapper__
+node_modules
+static

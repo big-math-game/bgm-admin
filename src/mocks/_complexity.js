@@ -2,18 +2,18 @@ const Complexity = [
   {
     id: 'easy',
     value: 0,
-    name: 'Easy',
+    name: 'Easy'
   },
   {
     id: 'medium',
     value: 1,
-    name: 'Medium',
+    name: 'Medium'
   },
   {
     id: 'hard',
     value: 2,
-    name: 'Hard',
-  },
+    name: 'Hard'
+  }
 ]
 
 export default Complexity

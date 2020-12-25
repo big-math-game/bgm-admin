@@ -17,7 +17,7 @@ const Menu = [
         id: 'addTask',
         name: 'Add task',
         link: 'add-task'
-      },
+      }
     ]
   }
 ]
