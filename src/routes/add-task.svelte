@@ -47,7 +47,6 @@
     } else {
       localStorage.setItem('task', JSON.stringify([createTask(id, theme, description, image, difficulty, position, answer)]))
     }
-    goto('/tasks')
   }
 
   // let fields = [{ id: '1' }, { id: '2' }];
@@ -64,6 +63,8 @@
 <svelte:head>
   <title>Add tasks</title>
 </svelte:head>
+
+<h3 class="title is-3">Added task</h3>
 
 <form class="form-horizontal" enctype="multipart/form-data" on:submit|preventDefault="{submitHandler}">
   <fieldset class="fieldset mr-2">

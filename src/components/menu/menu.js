@@ -16,7 +16,7 @@ const Menu = [
       {
         id: 'Add-list',
         name: 'Add list',
-        link: 'add-list'
+        link: 'add-task-list'
       },
       {
         id: 'addTask',
