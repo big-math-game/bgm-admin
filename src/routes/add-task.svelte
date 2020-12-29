@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { goto } from '@sapper/app.mjs'
   import Complexity from '../mocks/_complexity'
   import { joinCssClasses } from '../utils/utils'
   import { onMount } from 'svelte'
