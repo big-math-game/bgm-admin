@@ -79,7 +79,7 @@
                 <!--  <th>{task.topic}</th>-->
                 <!--{/if}-->
                 <th>{task.id}</th>
-                <th>{themeData.find((theme) => theme.id === task.theme_id).theme}</th>
+                <th>{'theme:' + themeData.find((theme) => theme.id === task.theme_id).theme + ` | theme_id: ${task.theme_id}`}</th>
                 <th>{task.difficulty}</th>
                 <th>{task.position}</th>
                 <th>{task.description}</th>
