@@ -2,10 +2,11 @@
   export let items = []
   export let searchProperties = []
   export let title = ''
-  export let returnedValue
+  export let returnedValue = {}
   let searchTerm: string = ''
   let selectedIndex = 0
   let selectedProperty = ''
+  let filteredList
   $: filteredList = items.filter((item) => item[selectedProperty ? selectedProperty : searchProperties[0]].indexOf(searchTerm) !== -1)
 </script>
 
@@ -23,8 +24,7 @@
   </p>
   <div class="panel-block">
     <p class="control has-icons-left">
-      <label for="search-input"></label>
-      <input id="search-input" class="input is-primary" type="text" placeholder="Search" bind:value="{searchTerm}" />
+      <label> <input class="input is-primary" type="text" placeholder="Search" bind:value="{searchTerm}" /> </label>
       <span class="icon is-left"> <i class="fas fa-search" aria-hidden="true"></i> </span>
     </p>
   </div>
