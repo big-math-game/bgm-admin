@@ -2,7 +2,7 @@
   export let items = []
   export let searchProperties = []
   export let title = ''
-  export let returnedValue = {}
+  export let returnedValue = []
   let searchTerm: string = ''
   let selectedIndex = 0
   let selectedProperty = ''
@@ -24,7 +24,7 @@
   </p>
   <div class="panel-block">
     <p class="control has-icons-left">
-      <label> <input class="input is-primary" type="text" placeholder="Search" bind:value="{searchTerm}" /> </label>
+      <label><input class="input is-primary" type="text" placeholder="Search" bind:value="{searchTerm}" /></label>
       <span class="icon is-left"> <i class="fas fa-search" aria-hidden="true"></i> </span>
     </p>
   </div>
@@ -33,10 +33,11 @@
       <a
         class="panel-block is-active"
         on:click="{() => {
-          returnedValue = list
+          returnedValue = returnedValue ? [...returnedValue, list] : [list]
+          searchTerm = ''
         }}">
         <span class="panel-icon"> <i class="fas fa-user" aria-hidden="true"></i> </span>
-        {#each searchProperties as properties}{list[properties] + ' '}{/each}
+        {#each searchProperties as property, i}{property + ': ' + list[property] + ' '}{/each}
       </a>
     {/each}
   {/if}
