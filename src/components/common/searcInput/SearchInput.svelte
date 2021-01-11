@@ -7,7 +7,10 @@
   let selectedIndex = 0
   let selectedProperty = ''
   let filteredList
-  $: filteredList = items.filter((item) => item[selectedProperty ? selectedProperty : searchProperties[0]].indexOf(searchTerm) !== -1)
+  $: filteredList = items.filter(
+    (item) =>
+      item[selectedProperty ? selectedProperty : searchProperties[0]].indexOf(searchTerm) !== -1 && returnedValue && !returnedValue.includes(item)
+  )
 </script>
 
 <article class="panel is-primary">
