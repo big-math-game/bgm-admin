@@ -12,3 +12,11 @@
   </div>
   <button class="modal-close is-large" aria-label="close" on:click="{close}"></button>
 </div>
+
+<style>
+  .modal-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
