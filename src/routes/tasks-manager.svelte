@@ -1,12 +1,17 @@
 <script lang="ts">
   import Complexity from '../mocks/_complexity'
   import { onMount } from 'svelte'
+  import Modal from '../components/common/modal/Modal.svelte'
+  import DeleteWindow from '../components/delete-window/DeleteWindow.svelte'
 
   let themeData = []
   let tasksData = []
 
   let difficulty = 0
   let topic: string = 'all'
+
+  let taskIndex = 0
+  let deleteTaskWindow: boolean = false
 
   onMount(() => {
     themeData = JSON.parse(localStorage.getItem('theme'))
@@ -99,9 +104,8 @@
                 <td
                   class="button is-danger button-delete is-small ml-2 mt-1"
                   on:click="{() => {
-                    tasksData.splice(i, 1)
-                    tasksData = [...tasksData]
-                    localStorage.setItem('task', JSON.stringify(tasksData))
+                    taskIndex = i
+                    deleteTaskWindow = true
                   }}">
                   <span class="icon"> <i class="fas fa-times"></i> </span>
                 </td>
@@ -113,6 +117,10 @@
     </table>
   </div>
 </div>
+
+<Modal bind:active="{deleteTaskWindow}">
+  <DeleteWindow bind:close="{deleteTaskWindow}" bind:tasksData bind:taskIndex />
+</Modal>
 
 <style>
   .table td,
