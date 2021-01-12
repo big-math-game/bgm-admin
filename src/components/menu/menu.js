@@ -9,11 +9,6 @@ const Menu = [
         link: '/'
       },
       {
-        id: 'Tasks',
-        name: 'Tasks',
-        link: 'tasks'
-      },
-      {
         id: 'Add-list',
         name: 'Add list',
         link: 'add-task-list'
@@ -22,6 +17,11 @@ const Menu = [
         id: 'addTask',
         name: 'Add task',
         link: 'add-task'
+      },
+      {
+        id: 'Tasks',
+        name: 'Tasks-manager',
+        link: 'tasks-manager'
       }
     ]
   }

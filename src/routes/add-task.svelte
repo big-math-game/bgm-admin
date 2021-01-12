@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Complexity from '../mocks/_complexity'
+  // import Complexity from '../mocks/_complexity'
   import { joinCssClasses } from '../utils/utils'
   import { onMount } from 'svelte'
   import Id from '../services/randomUID.ts'
@@ -51,6 +51,7 @@
 
   const createTask = (theme: string, description: string[], params, difficulty: number, answer: string[], position: number): taskTemplate => {
     return {
+      id: id,
       theme_id: theme,
       template: description,
       params: calculated ? params : null,
@@ -136,8 +137,9 @@
       </div>
     </div>
 
+    <!--
     <hr />
-    <!-- Select Basic -->
+     Select Basic
     <div class="field mb-5">
       <label class="label" for="complexity">Select complexity</label>
       <div class="control">
@@ -150,6 +152,7 @@
         </div>
       </div>
     </div>
+    -->
 
     <hr />
     <!-- Select Basic -->

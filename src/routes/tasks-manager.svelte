@@ -60,33 +60,42 @@
       <thead>
         <tr>
           <!-- <th><abbr title="Topic">Topic</abbr></th>-->
-          <th><abbr title="Id">Id</abbr></th>
-          <th><abbr title="Theme">Theme</abbr></th>
-          <th><abbr title="Complexity">Difficulty</abbr></th>
-          <th><abbr title="Position">Position</abbr></th>
-          <th><abbr title="Description">Description</abbr></th>
-          <th><abbr title="Image">Image</abbr></th>
-          <th><abbr title="Answer">Answer</abbr></th>
+          <th title="Task id"><abbr title="Id">Id</abbr></th>
+          <th title="Theme"><abbr>Theme</abbr></th>
+          <!--<th><abbr title="Complexity">Difficulty</abbr></th>-->
+          <th title="Position"><abbr title="Position">Pos</abbr></th>
+          <th title="Task description"><abbr title="Description">Description variants</abbr></th>
+          <!--<th><abbr title="Image">Image</abbr></th>-->
+          <th title="Params"><abbr title="Answer">Params</abbr></th>
+          <th title="Answer"><abbr title="Answer">Answers</abbr></th>
         </tr>
       </thead>
 
       {#if tasksData}
         <tbody>
           {#each tasksData as task, i (task.id)}
-            {#if (task.difficulty === difficulty && task.theme_id === topic) || (topic === 'all' && task.difficulty === difficulty)}
+            {#if task.theme_id === topic || topic === 'all'}
               <tr>
                 <!--{#if task.topic}-->
                 <!--  <th>{task.topic}</th>-->
                 <!--{/if}-->
                 <th>{task.id}</th>
                 <th>{'theme:' + themeData.find((theme) => theme.id === task.theme_id).theme + ` | theme_id: ${task.theme_id}`}</th>
-                <th>{task.difficulty}</th>
+                <!--<th>{task.difficulty}</th>-->
                 <th>{task.position}</th>
-                <th>{task.description}</th>
-                {#if task.image !== undefined}
-                  <th>{task.image}</th>
-                {/if}
-                <th>{task.answer}</th>
+                <th>{task.template.map((description, i) => `${i + 1}) ` + description).join('\n')}</th>
+                <!--{#if task.image !== undefined}-->
+                <!--  <th>{task.image}</th>-->
+                <!--{/if}-->
+                <th class="params">
+                  {task.params ? task.params.map((answer, i) => `${i + 1}) Param: ${answer.name},\n Min: ${answer.min},\n Max: ${answer.max}\n`) : 'none'}
+                </th>
+                <th class="answer">
+                  {task.answer[0]
+                    .split(',')
+                    .map((answer, i) => `${i + 1}) ` + answer)
+                    .join('\n')}
+                </th>
                 <td
                   class="button is-danger button-delete is-small ml-2 mt-1"
                   on:click="{() => {
@@ -110,6 +119,7 @@
   .table th {
     padding: 3px 5px;
     font-size: 11px;
+    white-space: pre-wrap;
   }
 
   @media (min-width: 1281px) {
@@ -125,5 +135,13 @@
 
   abbr {
     text-decoration: none;
+  }
+
+  .answer {
+    min-width: 210px;
+  }
+
+  .params {
+    min-width: 100px;
   }
 </style>
