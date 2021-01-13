@@ -79,8 +79,6 @@
     }, 2000)
   }
 
-  const cleanFields = () => {}
-
   onMount(() => {
     themeData = JSON.parse(localStorage.getItem('theme'))
     tasksData = JSON.parse(localStorage.getItem('task'))
@@ -177,9 +175,7 @@
 
     <hr />
     <!-- checkbox Basic -->
-    <div class="field mb-5">
-      <label class="checkbox"> <input type="checkbox" bind:checked="{calculated}" on:click="{cleanFields}" /> Calculated</label>
-    </div>
+    <div class="field mb-5"><label class="checkbox"> <input type="checkbox" bind:checked="{calculated}" /> Calculated</label></div>
 
     {#if !calculated}
       {#each fields as field, i (field.id)}
