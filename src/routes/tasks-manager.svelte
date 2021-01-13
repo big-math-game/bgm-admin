@@ -1,17 +1,18 @@
 <script lang="ts">
-  import Complexity from '../mocks/_complexity'
+  // import Complexity from '../mocks/_complexity'
   import { onMount } from 'svelte'
   import Modal from '../components/common/modal/Modal.svelte'
-  import DeleteWindow from '../components/delete-window/DeleteWindow.svelte'
+  import DeleteTaskWindow from '../components/delete-task-window/DeleteTaskWindow.svelte'
 
   let themeData = []
   let tasksData = []
 
-  let difficulty = 0
+  // let difficulty = 0
   let topic: string = 'all'
 
   let taskIndex = 0
   let deleteTaskWindow: boolean = false
+  let editTaskWindow: boolean = true
 
   onMount(() => {
     themeData = JSON.parse(localStorage.getItem('theme'))
@@ -48,15 +49,15 @@
     </div>
   </div>
 
-  <div class="tabs">
-    <ul>
-      {#each Complexity as item (item.id)}
-        <li class="{item.value === difficulty ? 'is-active' : ''}" on:click|preventDefault="{() => (difficulty = item.value)}">
-          <a href=".">{item.name}</a>
-        </li>
-      {/each}
-    </ul>
-  </div>
+  <!--  <div class="tabs">-->
+  <!--    <ul>-->
+  <!--      {#each Complexity as item (item.id)}-->
+  <!--        <li class="{item.value === difficulty ? 'is-active' : ''}" on:click|preventDefault="{() => (difficulty = item.value)}">-->
+  <!--          <a href=".">{item.name}</a>-->
+  <!--        </li>-->
+  <!--      {/each}-->
+  <!--    </ul>-->
+  <!--  </div>-->
 
   <h3 class="title is-3">Tasks</h3>
 
@@ -85,7 +86,7 @@
                 <!--  <th>{task.topic}</th>-->
                 <!--{/if}-->
                 <th>{task.id}</th>
-                <th>{'theme:' + themeData.find((theme) => theme.id === task.theme_id).theme + ` | theme_id: ${task.theme_id}`}</th>
+                <th>{'theme: ' + themeData.find((theme) => theme.id === task.theme_id).theme + ` | theme_id: ${task.theme_id}`}</th>
                 <!--<th>{task.difficulty}</th>-->
                 <th>{task.position}</th>
                 <th>{task.template.map((description, i) => `${i + 1}) ` + description).join('\n')}</th>
@@ -101,6 +102,14 @@
                     .map((answer, i) => `${i + 1}) ` + answer)
                     .join('\n')}
                 </th>
+                <td
+                  class="button is-primary is-small ml-2 mt-1"
+                  on:click="{() => {
+                    taskIndex = i
+                    editTaskWindow = true
+                  }}">
+                  <span class="icon"> <i class="fas fa-lg fa-edit"></i> </span>
+                </td>
                 <td
                   class="button is-danger button-delete is-small ml-2 mt-1"
                   on:click="{() => {
@@ -119,8 +128,10 @@
 </div>
 
 <Modal bind:active="{deleteTaskWindow}">
-  <DeleteWindow bind:close="{deleteTaskWindow}" bind:tasksData bind:taskIndex />
+  <DeleteTaskWindow bind:close="{deleteTaskWindow}" bind:tasksData bind:taskIndex />
 </Modal>
+
+<Modal bind:active="{editTaskWindow}" />
 
 <style>
   .table td,
