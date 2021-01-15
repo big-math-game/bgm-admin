@@ -3,16 +3,18 @@
   import { onMount } from 'svelte'
   import Modal from '../components/common/modal/Modal.svelte'
   import DeleteTaskWindow from '../components/delete-task-window/DeleteTaskWindow.svelte'
+  import EditTaskWindow from '../components/edit-task-window/EditTaskWindow.svelte'
+  import type { taskTemplate } from '../types/tasks.type'
 
   let themeData = []
-  let tasksData = []
+  let tasksData: taskTemplate[] = []
 
   // let difficulty = 0
   let topic: string = 'all'
 
-  let taskIndex = 0
+  let taskIndex: number = 0
   let deleteTaskWindow: boolean = false
-  let editTaskWindow: boolean = true
+  let editTaskWindow: boolean = false
 
   onMount(() => {
     themeData = JSON.parse(localStorage.getItem('theme'))
@@ -130,8 +132,11 @@
 <Modal bind:active="{deleteTaskWindow}">
   <DeleteTaskWindow bind:close="{deleteTaskWindow}" bind:tasksData bind:taskIndex />
 </Modal>
-
-<Modal bind:active="{editTaskWindow}" />
+{#if editTaskWindow}
+  <Modal bind:active="{editTaskWindow}">
+    <EditTaskWindow close="{editTaskWindow}" bind:tasksData bind:taskIndex bind:themeData />
+  </Modal>
+{/if}
 
 <style>
   .table td,
