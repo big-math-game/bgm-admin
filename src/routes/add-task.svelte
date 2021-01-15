@@ -55,7 +55,7 @@
       theme_id: theme,
       template: description,
       params: calculated ? params : null,
-      answer: [answer.join(',')],
+      answer: answer,
       difficulty: difficulty,
       position: position
     }

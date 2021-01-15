@@ -24,10 +24,11 @@ export type task = {
 }
 
 export type taskTemplate = {
+  id?: string
   theme_id: string
   template: string[]
   params: [{ name: string; min: number; max: number }] | null
-  answer: [string]
+  answer: string[]
   difficulty: number
   position: number
 }
