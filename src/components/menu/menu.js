@@ -10,7 +10,7 @@ const Menu = [
       },
       {
         id: 'Add-list',
-        name: 'Add list',
+        name: 'Add task list',
         link: 'add-task-list'
       },
       {
