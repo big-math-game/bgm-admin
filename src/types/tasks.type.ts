@@ -1,3 +1,10 @@
+export type themeList = {
+  id: string
+  name: string
+  description: string
+  level: 0
+}
+
 export type taskList = [
   {
     id: string
@@ -27,8 +34,8 @@ export type taskTemplate = {
   id?: string
   theme_id: string
   template: string[]
-  params: [{ name: string; min: number; max: number }] | null
+  params?: [{ name: string; min: number; max: number }] | null
   answer: string[]
-  difficulty: number
-  position: number
+  position?: number
+  image?: string | null
 }

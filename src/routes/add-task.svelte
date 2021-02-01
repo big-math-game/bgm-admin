@@ -3,17 +3,18 @@
   import { joinCssClasses } from '../utils/utils'
   import { onMount } from 'svelte'
   import Id from '../services/randomUID.ts'
-  import type { taskTemplate } from '../types/tasks.type'
+  import type { themeList } from '../types/tasks.type'
   import { fade } from 'svelte/transition'
+  import { createTemplate, createTheme, getThemeList } from '../services/api-requests/api-requests'
 
-  let themeData = []
-  let tasksData = []
+  let themeData: themeList[] = []
   let active: boolean = false
   let taskCreated: boolean = false
   let calculated: boolean = false
 
   let id: string = Id()
   let theme: string = ''
+  let themeName: string = ''
   let difficulty = 0
   let position: string = '0'
   let description: string[] = []
@@ -49,24 +50,10 @@
     params = [...params]
   }
 
-  const createTask = (theme: string, description: string[], params, difficulty: number, answer: string[], position: number): taskTemplate => {
-    return {
-      id: id,
-      theme_id: theme,
-      template: description,
-      params: calculated ? params : null,
-      answer: answer,
-      difficulty: difficulty,
-      position: position
-    }
-  }
+  const submitHandler = async () => {
+    const res = createTemplate(theme, description, answer)
+    console.log(res)
 
-  const submitHandler = () => {
-    if (tasksData) {
-      localStorage.setItem('task', JSON.stringify([...tasksData, createTask(theme, description, params, difficulty, answer, Number(position))]))
-    } else {
-      localStorage.setItem('task', JSON.stringify([createTask(theme, description, params, difficulty, answer, Number(position))]))
-    }
     taskCreated = true
     theme = ''
     difficulty = 0
@@ -79,9 +66,18 @@
     }, 2000)
   }
 
-  onMount(() => {
-    themeData = JSON.parse(localStorage.getItem('theme'))
-    tasksData = JSON.parse(localStorage.getItem('task'))
+  const createThemeHandler = async () => {
+    if (themeName.length > 0 && themeName !== ' ') {
+      const res = await createTheme(themeName)
+      themeData = [...themeData, res]
+      console.log(themeData)
+      active = false
+      themeName = ''
+    }
+  }
+
+  onMount(async () => {
+    themeData = await getThemeList()
   })
 </script>
 
@@ -103,7 +99,7 @@
               {#if themeData}
                 <option selected disabled></option>
                 {#each themeData as theme (theme.id)}
-                  <option value="{theme.id}">{theme.theme}</option>
+                  <option value="{theme.id}">{theme.name}</option>
                 {/each}
               {:else}
                 <option disabled>add theme</option>
@@ -114,25 +110,19 @@
         </div>
       </div>
 
-      <div class="{joinCssClasses('field', !active ? 'is-invisible' : '')}">
-        <label class="label" for="addTopic">Add theme</label>
-        <div class="field has-addons">
-          <div class="control">
-            <input id="addTopic" name="answerOptions" class="input " placeholder="placeholder" type="text" bind:value="{theme}" />
-          </div>
-          <div class="control">
-            <div
-              class="button is-success"
-              on:click|preventDefault="{() => {
-                localStorage.setItem('theme', JSON.stringify(themeData === null ? [{ id: id, theme: theme }] : [...themeData, { id: id, theme: theme }]))
-                active = !active
-                themeData = JSON.parse(localStorage.getItem('theme'))
-              }}">
-              save
+      {#if active}
+        <div class="{joinCssClasses('field', 'ml-1')}">
+          <label class="label" for="addTopic">Add theme</label>
+          <div class="field has-addons">
+            <div class="control">
+              <input id="addTopic" name="answerOptions" class="input " placeholder="Add theme name" type="text" required bind:value="{themeName}" />
+            </div>
+            <div class="control">
+              <div class="button is-success" on:click|preventDefault="{createThemeHandler}">save</div>
             </div>
           </div>
         </div>
-      </div>
+      {/if}
     </div>
 
     <!--
@@ -153,7 +143,7 @@
     -->
 
     <hr />
-    <!-- Select Basic -->
+    <!-- Select Basic
     <div class="field mb-5">
       <label class="label" for="listNumber">Select list task position</label>
       <div class="control">
@@ -172,10 +162,13 @@
         </div>
       </div>
     </div>
+    <hr/>
+    -->
 
-    <hr />
-    <!-- checkbox Basic -->
-    <div class="field mb-5"><label class="checkbox"> <input type="checkbox" bind:checked="{calculated}" /> Calculated</label></div>
+    <!-- checkbox Basic
+    <div class="field mb-5"><label class="checkbox"> <input type="checkbox" bind:checked="{calculated}"/>
+      Calculated</label></div>
+    -->
 
     {#if !calculated}
       {#each fields as field, i (field.id)}
