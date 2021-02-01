@@ -14,6 +14,11 @@ const Menu = [
         link: 'add-task-list'
       },
       {
+        id: 'lists-manager',
+        name: 'Lists manager',
+        link: 'lists-manager'
+      },
+      {
         id: 'addTask',
         name: 'Add task',
         link: 'add-task'
