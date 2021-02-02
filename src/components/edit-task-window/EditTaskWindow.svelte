@@ -3,27 +3,23 @@
   import Id from '../../services/randomUID'
   import { joinCssClasses } from '../../utils/utils'
   import { fade } from 'svelte/transition'
+  import { modifyTemplate } from '../../services/api-requests/api-requests'
 
   export let close: boolean = false
-  export let taskIndex: number = 0
-  export let tasksData: taskTemplate[] = []
-  export let themeData
+  export let themes = []
+  export let selectedTask: taskTemplate = { theme_id: '', template: [''], answer: [''] }
 
   let active: boolean = false
-  let taskCreated: boolean = false
-  $: availabilityOfParams = !!tasksData[taskIndex].params
-  $: calculated = availabilityOfParams
+  let taskSaved: boolean = false
 
-  $: positionNumber = tasksData[taskIndex].position.toString()
-  $: themeId = tasksData[taskIndex].theme_id
-
+  $: positionNumber = selectedTask.position.toString()
+  $: themeId = selectedTask.theme_id
   $: theme = themeId
   $: position = positionNumber
-  $: description = tasksData[taskIndex].template
-  $: params = tasksData[taskIndex].params ? tasksData[taskIndex].params : null
-  $: answer = tasksData[taskIndex].answer
-
-  $: console.log(tasksData[taskIndex].params)
+  $: description = selectedTask.template
+  $: params = selectedTask.params ? selectedTask.params : null
+  $: answer = selectedTask.answer
+  $: image = selectedTask.image
 
   let disabled
   $: disabled = !theme && !description.length > 0 && !answer.length > 0
@@ -31,41 +27,36 @@
   let fields = [{ id: Id() }]
   const addField = () => {
     fields = [...fields, { id: Id() }]
+    selectedTask.template = [...selectedTask.template, '']
   }
 
   const removeField = () => {
     fields.pop()
     fields = [...fields]
+    selectedTask.template.pop()
+    selectedTask.answer.pop()
+    selectedTask.template = [...selectedTask.template]
   }
-
-  const addParamField = () => {
-    if (tasksData[taskIndex].params) {
-      params = [...params, { name: '', min: 1, max: 1 }]
-    } else {
-      tasksData[taskIndex].params = [{ name: '', min: 1, max: 1 }]
-    }
-  }
-  const removeParamField = () => {
-    params.pop()
-    params = [...params]
-  }
-
-  //const submitHandler = () => {
-
-  // }
 </script>
 
 <div class="edit-window">
   <h3 class="title is-3">Edit task</h3>
 
+  {theme}
+  <br />
+  {description}
+  <br />
+  {answer}
+
   <form
     class="form-horizontal"
     enctype="multipart/form-data"
-    on:submit="{() => {
-      const { id, difficulty } = tasksData[taskIndex]
-      tasksData[taskIndex] = { id, theme_id: theme, template: description, params: calculated ? (params.length > 0 ? params : null) : null, answer: answer, difficulty, position: Number(position) }
-      localStorage.setItem('task', JSON.stringify(tasksData))
-      close = false
+    on:submit|preventDefault="{async () => {
+      if (selectedTask.id && theme && description && answer && position) {
+        const res = await modifyTemplate(selectedTask.id, theme, description, answer, Number(position))
+        console.log(res)
+        close = false
+      }
     }}">
     <fieldset class="fieldset mr-2">
       <!-- Select Basic -->
@@ -75,10 +66,10 @@
           <div class="control">
             <div class="select">
               <select id="topic" name="topic" bind:value="{theme}" required>
-                {#if themeData}
+                {#if themes}
                   <option selected disabled></option>
-                  {#each themeData as theme (theme.id)}
-                    <option value="{theme.id}">{theme.theme}</option>
+                  {#each themes as theme (theme.id)}
+                    <option value="{theme.id}">{theme.name}</option>
                   {/each}
                 {:else}
                   <option disabled>add theme</option>
@@ -99,9 +90,9 @@
               <div
                 class="button is-success"
                 on:click|preventDefault="{() => {
-                  localStorage.setItem('theme', JSON.stringify(themeData === null ? [{ id: Id(), theme: theme }] : [...themeData, { id: Id(), theme: theme }]))
+                  localStorage.setItem('theme', JSON.stringify(themes === null ? [{ id: Id(), theme: theme }] : [...themes, { id: Id(), theme: theme }]))
                   active = !active
-                  themeData = JSON.parse(localStorage.getItem('theme'))
+                  themes = JSON.parse(localStorage.getItem('theme'))
                 }}">
                 save
               </div>
@@ -132,81 +123,31 @@
       </div>
 
       <hr />
-      <!-- checkbox Basic -->
-      <div class="field mb-5"><label class="checkbox"> <input type="checkbox" bind:checked="{calculated}" /> Calculated</label></div>
 
-      {#if !calculated}
-        {#each description as description, i (i)}
-          <!-- Textarea -->
-          <div class="field mb-5">
-            <label class="label" for="{`task-${i}`}">Enter description {i + 1}</label>
-            <div class="control"><textarea class="textarea" id="{`task-${i}`}" name="task" bind:value="{description}" required></textarea></div>
-          </div>
-
-          <!-- Text input-->
-          <div class="field mb-5">
-            <label class="label" for="{`answer-${i}`}">Answer {i + 1}</label>
-            <div class="control">
-              <input id="{`answer-${i}`}" name="answer" type="text" placeholder="placeholder" class="input" bind:value="{answer[i]}" required />
-              <p class="help">Add answer {i + 1}</p>
-            </div>
-          </div>
-        {/each}
-      {:else}
+      {#each description as description, i (i)}
+        <!-- Textarea -->
         <div class="field mb-5">
-          <label class="label" for="task">Enter description</label>
-          <div class="control"><textarea class="textarea" id="task" name="task" bind:value="{description[0]}" required></textarea></div>
-        </div>
-
-        <h1 class="title is-5">Params</h1>
-        {#if params !== null && params}
-          {#each params as param, i (i)}
-            <div class="field is-horizontal">
-              <div class="field-body">
-                <div class="field">
-                  <p class="control is-expanded">
-                    <label for="{`params-${i}`}"></label>
-                    <input id="{`params-${i}`}" class="input" type="text" placeholder="Param" bind:value="{param.name}" required />
-                  </p>
-                </div>
-                <div class="field">
-                  <p class="control is-expanded"><label> <input class="input" type="number" placeholder="Min" bind:value="{param.min}" /> </label></p>
-                </div>
-                <div class="field">
-                  <p class="control is-expanded"><label> <input class="input" type="number" placeholder="Max" bind:value="{param.max}" /> </label></p>
-                </div>
-              </div>
-            </div>
-          {/each}
-        {/if}
-
-        <!-- Button -->
-        <div class="field is-grouped mb-5">
-          <div class="control"><button class="button is-primary" on:click|preventDefault="{addParamField}">Add param</button></div>
-          {#if params}
-            <div class="control"><button class="button is-danger" on:click|preventDefault="{removeParamField}">Remove param</button></div>
-          {/if}
+          <label class="label" for="{`task-${i}`}">Enter description {i + 1}</label>
+          <div class="control"><textarea class="textarea" id="{`task-${i}`}" name="task" bind:value="{description}" required></textarea></div>
         </div>
 
         <!-- Text input-->
         <div class="field mb-5">
-          <label class="label" for="answer">Answer</label>
+          <label class="label" for="{`answer-${i}`}">Answer {i + 1}</label>
           <div class="control">
-            <input id="answer" name="answer" type="text" placeholder="placeholder" class="input" bind:value="{answer[0]}" required />
-            <p class="help">Add answer</p>
+            <input id="{`answer-${i}`}" name="answer" type="text" placeholder="placeholder" class="input" bind:value="{answer[i]}" required />
+            <p class="help">Add answer {i + 1}</p>
           </div>
         </div>
-      {/if}
+      {/each}
 
-      {#if !calculated}
-        <!-- Button -->
-        <div class="field is-grouped mb-5">
-          <div class="control"><button class="button is-primary" on:click|preventDefault="{addField}">Add variant</button></div>
-          {#if fields.length > 1}
-            <div class="control"><button class="button is-danger" on:click|preventDefault="{removeField}">Remove variant</button></div>
-          {/if}
-        </div>
-      {/if}
+      <!-- Button -->
+      <div class="field is-grouped mb-5">
+        <div class="control"><button class="button is-primary" on:click|preventDefault="{addField}">Add variant</button></div>
+        {#if fields.length > 1}
+          <div class="control"><button class="button is-danger" on:click|preventDefault="{removeField}">Remove variant</button></div>
+        {/if}
+      </div>
 
       <hr />
       <!-- Button -->
@@ -218,9 +159,9 @@
             name="submit"
             type="submit"
             class="button is-success"
-            disabled="{disabled}">{themeData === null ? 'Add theme' : 'save'}</button>
-          {#if taskCreated}
-            <p transition:fade="{{ duration: 250 }}" class="help has-text-success is-size-3">Task added!</p>
+            disabled="{disabled}">{themes === null ? 'Add theme' : 'save'}</button>
+          {#if taskSaved}
+            <p transition:fade="{{ duration: 250 }}" class="help has-text-success is-size-3">Task saved!</p>
           {/if}
         </div>
       </div>

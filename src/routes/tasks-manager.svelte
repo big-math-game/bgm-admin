@@ -1,24 +1,31 @@
 <script lang="ts">
-  // import Complexity from '../mocks/_complexity'
   import { onMount } from 'svelte'
   import Modal from '../components/common/modal/Modal.svelte'
   import DeleteTaskWindow from '../components/delete-task-window/DeleteTaskWindow.svelte'
   import EditTaskWindow from '../components/edit-task-window/EditTaskWindow.svelte'
-  import type { taskTemplate } from '../types/tasks.type'
+  import { getTemplateList, getTemplate, getThemeList } from '../services/api-requests/api-requests'
+  import { templateList } from '../store/store'
 
-  let themeData = []
-  let tasksData: taskTemplate[] = []
-
-  // let difficulty = 0
-  let topic: string = 'all'
-
-  let taskIndex: number = 0
+  let themes = []
+  let theme: string = 'all'
+  let selectedTask = {}
   let deleteTaskWindow: boolean = false
   let editTaskWindow: boolean = false
 
-  onMount(() => {
-    themeData = JSON.parse(localStorage.getItem('theme'))
-    tasksData = JSON.parse(localStorage.getItem('task'))
+  const getAllTasks = async () => {
+    let tasksData = []
+    for (let i = 0; i < themes.length; i++) {
+      const res = await getTemplateList(themes[i].id)
+      if (res) {
+        tasksData = tasksData.concat(res)
+      }
+    }
+    return tasksData
+  }
+
+  onMount(async () => {
+    themes = await getThemeList()
+    templateList.set(await getAllTasks())
   })
 </script>
 
@@ -32,13 +39,13 @@
   <div class="level">
     <div class="level-left">
       <div class="level-item">
-        {#if themeData}
+        {#if themes}
           <div class="select">
             <label>
-              <select bind:value="{topic}">
+              <select bind:value="{theme}">
                 <option value="all" selected>all</option>
-                {#each themeData as topic (topic.id)}
-                  <option value="{topic.id}">{topic.theme}</option>
+                {#each themes as topic (topic.id)}
+                  <option value="{topic.id}">{topic.name}</option>
                 {/each}
               </select>
             </label>
@@ -51,75 +58,43 @@
     </div>
   </div>
 
-  <!--  <div class="tabs">-->
-  <!--    <ul>-->
-  <!--      {#each Complexity as item (item.id)}-->
-  <!--        <li class="{item.value === difficulty ? 'is-active' : ''}" on:click|preventDefault="{() => (difficulty = item.value)}">-->
-  <!--          <a href=".">{item.name}</a>-->
-  <!--        </li>-->
-  <!--      {/each}-->
-  <!--    </ul>-->
-  <!--  </div>-->
-
   <h3 class="title is-3">Tasks</h3>
 
   <div class="table-container">
     <table class="table is-bordered">
       <thead>
         <tr>
-          <!-- <th><abbr title="Topic">Topic</abbr></th>-->
           <th title="Task id"><abbr title="Id">Id</abbr></th>
-          <th title="Theme"><abbr>Theme</abbr></th>
-          <!--<th><abbr title="Complexity">Difficulty</abbr></th>-->
+          <th title="Theme"><abbr>Theme Id</abbr></th>
           <th title="Position"><abbr title="Position">Pos</abbr></th>
           <th title="Task description"><abbr title="Description">Description variants</abbr></th>
-          <!--<th><abbr title="Image">Image</abbr></th>-->
-          <th title="Params"><abbr title="Answer">Params</abbr></th>
-          <th title="Answer"><abbr title="Answer">Answers</abbr></th>
         </tr>
       </thead>
 
-      {#if tasksData}
+      {#if $templateList}
         <tbody>
-          {#each tasksData as task, i (task.id)}
-            {#if task.theme_id === topic || topic === 'all'}
+          {#each $templateList as task, i (task.id)}
+            {#if task.theme_id === theme || theme === 'all'}
               <tr>
-                <!--{#if task.topic}-->
-                <!--  <th>{task.topic}</th>-->
-                <!--{/if}-->
                 <th>{task.id}</th>
-                <th>{'theme: ' + themeData.find((theme) => theme.id === task.theme_id).theme + ` | theme_id: ${task.theme_id}`}</th>
-                <!--<th>{task.difficulty}</th>-->
+                <th>{task.theme_id}</th>
                 <th>{task.position}</th>
                 <th>{task.template.map((description, i) => `${i + 1}) ` + description).join('\n')}</th>
-                <!--{#if task.image !== undefined}-->
-                <!--  <th>{task.image}</th>-->
-                <!--{/if}-->
-                <th class="params">
-                  {task.params ? task.params.map((answer, i) => `${i + 1}) Param: ${answer.name},\n Min: ${answer.min},\n Max: ${answer.max}\n`) : 'none'}
-                </th>
-                <th class="answer">
-                  {task.answer[0]
-                    .split(',')
-                    .map((answer, i) => `${i + 1}) ` + answer)
-                    .join('\n')}
-                </th>
                 <td
                   class="button is-primary is-small ml-2 mt-1"
-                  on:click="{() => {
-                    taskIndex = i
+                  on:click="{async () => {
+                    selectedTask = await getTemplate(task.id)
                     editTaskWindow = true
                   }}">
                   <span class="icon"> <i class="fas fa-lg fa-edit"></i> </span>
                 </td>
-                <td
-                  class="button is-danger button-delete is-small ml-2 mt-1"
-                  on:click="{() => {
-                    taskIndex = i
-                    deleteTaskWindow = true
-                  }}">
-                  <span class="icon"> <i class="fas fa-times"></i> </span>
-                </td>
+                <!--<td-->
+                <!--class="button is-danger button-delete is-small ml-2 mt-1"-->
+                <!--on:click="{() => {-->
+                <!--deleteTaskWindow = true-->
+                <!--}}">-->
+                <!--<span class="icon"> <i class="fas fa-times"></i> </span>-->
+                <!--</td>-->
               </tr>
             {/if}
           {/each}
@@ -130,11 +105,11 @@
 </div>
 
 <Modal bind:active="{deleteTaskWindow}">
-  <DeleteTaskWindow bind:close="{deleteTaskWindow}" bind:tasksData bind:taskIndex />
+  <DeleteTaskWindow bind:close="{deleteTaskWindow}" />
 </Modal>
 {#if editTaskWindow}
   <Modal bind:active="{editTaskWindow}">
-    <EditTaskWindow close="{editTaskWindow}" bind:tasksData bind:taskIndex bind:themeData />
+    <EditTaskWindow close="{editTaskWindow}" bind:selectedTask bind:themes />
   </Modal>
 {/if}
 
@@ -159,13 +134,5 @@
 
   abbr {
     text-decoration: none;
-  }
-
-  .answer {
-    min-width: 210px;
-  }
-
-  .params {
-    min-width: 100px;
   }
 </style>

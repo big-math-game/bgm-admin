@@ -1,7 +1,7 @@
 <script lang="ts">
   export let close: boolean = false
-  export let tasksData
-  export let taskIndex: number
+  //export let tasksData
+  //export let taskIndex: number
 </script>
 
 <div class="delete-window">
@@ -10,9 +10,7 @@
     <button
       class="button is-danger"
       on:click="{() => {
-        tasksData.splice(taskIndex, 1)
-        tasksData = [...tasksData]
-        localStorage.setItem('task', JSON.stringify(tasksData))
+        console.log('del')
         close = false
       }}">Yes</button>
     <button

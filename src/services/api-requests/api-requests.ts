@@ -45,3 +45,27 @@ export const createTemplate = async (theme_id: string, template: string[], answe
   )
   return res.result
 }
+
+export const modifyTemplate = async (id: string, themeId: string, template: string[], answer: string[], position?: number, image?: string) => {
+  const res = await createApiRequest(
+    requestOptions('MathAdminAPI.ModifyTemplate', {
+      id: id,
+      theme_id: themeId,
+      template: template,
+      answer: answer,
+      position: position,
+      image: image
+    })
+  )
+  return res.result
+}
+
+export const getTemplate = async (taskId) => {
+  const res = await createApiRequest(requestOptions('MathAdminAPI.GetTemplate', { id: taskId }))
+  return res.result
+}
+
+export const getTemplateList = async (themeId) => {
+  const res = await createApiRequest(requestOptions('MathAdminAPI.GetTemplateList', { theme_id: themeId }))
+  return res.result
+}
