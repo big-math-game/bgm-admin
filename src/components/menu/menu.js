@@ -19,6 +19,11 @@ const Menu = [
         link: 'lists-manager'
       },
       {
+        id: 'create-theme',
+        name: 'Create theme',
+        link: 'create-theme'
+      },
+      {
         id: 'theme-manager',
         name: 'Theme manager',
         link: 'theme-manager'

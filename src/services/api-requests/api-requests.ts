@@ -15,8 +15,8 @@ export function requestOptions(method: string, params?): fetchOptions {
   }
 }
 
-export const createTheme = async (name: string) => {
-  const res = await createApiRequest(requestOptions('MathAdminAPI.ModifyTheme', { name: name }))
+export const createTheme = async (name: string, description?: string) => {
+  const res = await createApiRequest(requestOptions('MathAdminAPI.ModifyTheme', { name: name, description: description }))
   return res.result
 }
 

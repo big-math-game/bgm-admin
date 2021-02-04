@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { taskTemplate } from '../../types/tasks.type'
   import Id from '../../services/randomUID'
-  import { joinCssClasses } from '../../utils/utils'
   import { fade } from 'svelte/transition'
   import { modifyTemplate } from '../../services/api-requests/api-requests'
 
@@ -9,9 +8,7 @@
   export let themes = []
   export let selectedTask: taskTemplate = { theme_id: '', template: [''], answer: [''] }
 
-  let active: boolean = false
   let taskSaved: boolean = false
-
   $: positionNumber = selectedTask.position.toString()
   $: themeId = selectedTask.theme_id
   $: theme = themeId
@@ -19,7 +16,7 @@
   $: description = selectedTask.template
   $: params = selectedTask.params ? selectedTask.params : null
   $: answer = selectedTask.answer
-  $: image = selectedTask.image
+  let image = selectedTask.image
 
   let disabled
   $: disabled = !theme && !description.length > 0 && !answer.length > 0
@@ -41,12 +38,6 @@
 
 <div class="edit-window">
   <h3 class="title is-3">Edit task</h3>
-
-  {theme}
-  <br />
-  {description}
-  <br />
-  {answer}
 
   <form
     class="form-horizontal"
@@ -75,27 +66,6 @@
                   <option disabled>add theme</option>
                 {/if}
               </select>
-            </div>
-            {#if !active}<button class="button is-primary" on:click|preventDefault="{() => (active = !active)}">Add theme</button>{/if}
-          </div>
-        </div>
-
-        <div class="{joinCssClasses('field', !active ? 'is-invisible' : '')}">
-          <label class="label" for="addTopic">Add theme</label>
-          <div class="field has-addons">
-            <div class="control">
-              <input id="addTopic" name="answerOptions" class="input " placeholder="placeholder" type="text" bind:value="{theme}" />
-            </div>
-            <div class="control">
-              <div
-                class="button is-success"
-                on:click|preventDefault="{() => {
-                  localStorage.setItem('theme', JSON.stringify(themes === null ? [{ id: Id(), theme: theme }] : [...themes, { id: Id(), theme: theme }]))
-                  active = !active
-                  themes = JSON.parse(localStorage.getItem('theme'))
-                }}">
-                save
-              </div>
             </div>
           </div>
         </div>
@@ -150,6 +120,17 @@
       </div>
 
       <hr />
+
+      <div class="field mb-5">
+        <label class="label" for="image">Image url</label>
+        <div class="control">
+          <input id="image" name="answer" type="text" placeholder="image url" class="input" bind:value="{image}" />
+          <p class="help">Add image url</p>
+        </div>
+      </div>
+
+      <hr />
+
       <!-- Button -->
       <div class="field mb-5">
         <label class="label" for="submit"></label>

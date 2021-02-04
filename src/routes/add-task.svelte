@@ -1,29 +1,18 @@
 <script lang="ts">
-  // import Complexity from '../mocks/_complexity'
-  import { joinCssClasses } from '../utils/utils'
   import { onMount } from 'svelte'
   import Id from '../services/randomUID.ts'
   import type { themeList } from '../types/tasks.type'
   import { fade } from 'svelte/transition'
-  import { createTemplate, createTheme, getThemeList } from '../services/api-requests/api-requests'
+  import { createTemplate, getThemeList } from '../services/api-requests/api-requests'
 
   let themeData: themeList[] = []
-  let active: boolean = false
   let taskCreated: boolean = false
-  let calculated: boolean = false
-
   let id: string = Id()
   let theme: string = ''
-  let themeName: string = ''
-  let difficulty = 0
-  let position: string = '0'
   let description: string[] = []
   let params: [{ name: string; min: number; max: number }] | null = [{ name: '', min: 1, max: 1 }]
-  // let image: string = ''
-  // let answerOptions = [];
-  // let taskHint = '';
+  let image: string = ''
   let answer: string[] = []
-  // let solution = '';
 
   let disabled
   $: disabled = !theme && !description.length > 0 && !answer.length > 0
@@ -38,42 +27,18 @@
     fields = [...fields]
   }
 
-  let paramsFields = [{ id: Id() }]
-  const addParamField = () => {
-    paramsFields = [...paramsFields, { id: Id() }]
-    params.push({ name: '', min: 1, max: 1 })
-  }
-  const removeParamField = () => {
-    paramsFields.pop()
-    paramsFields = [...paramsFields]
-    params.pop()
-    params = [...params]
-  }
-
   const submitHandler = async () => {
-    const res = createTemplate(theme, description, answer)
+    const res = createTemplate(theme, description, answer, image)
     console.log(res)
 
     taskCreated = true
     theme = ''
-    difficulty = 0
-    position = '0'
     description = []
     answer = []
     fields = [{ id: Id() }]
     setTimeout(() => {
       taskCreated = false
     }, 2000)
-  }
-
-  const createThemeHandler = async () => {
-    if (themeName.length > 0 && themeName !== ' ') {
-      const res = await createTheme(themeName)
-      themeData = [...themeData, res]
-      console.log(themeData)
-      active = false
-      themeName = ''
-    }
   }
 
   onMount(async () => {
@@ -106,200 +71,51 @@
               {/if}
             </select>
           </div>
-          {#if !active}<button class="button is-primary" on:click|preventDefault="{() => (active = !active)}">Add theme</button>{/if}
-        </div>
-      </div>
-
-      {#if active}
-        <div class="{joinCssClasses('field', 'ml-1')}">
-          <label class="label" for="addTopic">Add theme</label>
-          <div class="field has-addons">
-            <div class="control">
-              <input id="addTopic" name="answerOptions" class="input " placeholder="Add theme name" type="text" required bind:value="{themeName}" />
-            </div>
-            <div class="control">
-              <div class="button is-success" on:click|preventDefault="{createThemeHandler}">save</div>
-            </div>
-          </div>
-        </div>
-      {/if}
-    </div>
-
-    <!--
-    <hr />
-     Select Basic
-    <div class="field mb-5">
-      <label class="label" for="complexity">Select complexity</label>
-      <div class="control">
-        <div class="select">
-          <select id="complexity" name="complexity" bind:value="{difficulty}">
-            {#each Complexity as ComplexityItem (ComplexityItem.id)}
-              <option value="{ComplexityItem.value}">{ComplexityItem.name}</option>
-            {/each}
-          </select>
         </div>
       </div>
     </div>
-    -->
 
     <hr />
-    <!-- Select Basic
-    <div class="field mb-5">
-      <label class="label" for="listNumber">Select list task position</label>
-      <div class="control">
-        <div class="select">
-          <select id="listNumber" name="listNumber" bind:value="{position}">
-            <option>0</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
-            <option>7</option>
-            <option>8</option>
-          </select>
-        </div>
-      </div>
-    </div>
-    <hr/>
-    -->
 
-    <!-- checkbox Basic
-    <div class="field mb-5"><label class="checkbox"> <input type="checkbox" bind:checked="{calculated}"/>
-      Calculated</label></div>
-    -->
-
-    {#if !calculated}
-      {#each fields as field, i (field.id)}
-        <!-- Textarea -->
-        <div class="field mb-5">
-          <label class="label" for="{`task-${i}`}">Enter description {i + 1}</label>
-          <div class="control"><textarea class="textarea" id="{`task-${i}`}" name="task" bind:value="{description[i]}" required></textarea></div>
-        </div>
-
-        <!-- Text input-->
-        <div class="field mb-5">
-          <label class="label" for="{`answer-${i}`}">Answer {i + 1}</label>
-          <div class="control">
-            <input id="{`answer-${i}`}" name="answer" type="text" placeholder="placeholder" class="input" bind:value="{answer[i]}" required />
-            <p class="help">Add answer {i + 1}</p>
-          </div>
-        </div>
-      {/each}
-    {:else}
+    {#each fields as field, i (field.id)}
+      <!-- Textarea -->
       <div class="field mb-5">
-        <label class="label" for="task">Enter description</label>
-        <div class="control"><textarea class="textarea" id="task" name="task" bind:value="{description[0]}" required></textarea></div>
-      </div>
-
-      <label class="label" for="params">Params</label>
-      {#each paramsFields as paramsField, i (paramsField.id)}
-        <div class="field is-horizontal">
-          <div class="field-body">
-            <div class="field">
-              <p class="control is-expanded">
-                <input id="params" class="input" type="text" placeholder="Param" bind:value="{params[i].name}" required />
-              </p>
-            </div>
-            <div class="field">
-              <p class="control is-expanded"><label> <input class="input" type="number" placeholder="Min" bind:value="{params[i].min}" /> </label></p>
-            </div>
-            <div class="field">
-              <p class="control is-expanded"><label> <input class="input" type="number" placeholder="Max" bind:value="{params[i].max}" /> </label></p>
-            </div>
-          </div>
+        <label class="label" for="{`task-${i}`}">Enter description {i + 1}</label>
+        <div class="control">
+          <textarea class="textarea" id="{`task-${i}`}" name="task" bind:value="{description[i]}" required placeholder="description"></textarea>
         </div>
-      {/each}
-
-      <!-- Button -->
-      <div class="field is-grouped mb-5">
-        <div class="control"><button class="button is-primary" on:click|preventDefault="{addParamField}">Add param</button></div>
-        {#if paramsFields.length > 1}
-          <div class="control"><button class="button is-danger" on:click|preventDefault="{removeParamField}">Remove param</button></div>
-        {/if}
       </div>
 
       <!-- Text input-->
       <div class="field mb-5">
-        <label class="label" for="answer">Answer</label>
+        <label class="label" for="{`answer-${i}`}">Answer {i + 1}</label>
         <div class="control">
-          <input id="answer" name="answer" type="text" placeholder="placeholder" class="input" bind:value="{answer[0]}" required />
-          <p class="help">Add answer</p>
+          <input id="{`answer-${i}`}" name="answer" type="text" placeholder="answer" class="input" bind:value="{answer[i]}" required />
+          <p class="help">Add answer {i + 1}</p>
         </div>
       </div>
-    {/if}
-
-    {#if !calculated}
-      <!-- Button -->
-      <div class="field is-grouped mb-5">
-        <div class="control"><button class="button is-primary" on:click|preventDefault="{addField}">Add variant</button></div>
-        {#if fields.length > 1}
-          <div class="control"><button class="button is-danger" on:click|preventDefault="{removeField}">Remove variant</button></div>
-        {/if}
-      </div>
-    {/if}
-
-    <!-- File Button
-    <label class="label" for="imageFile">Added image</label>
-    <div class="file">
-      <label class="file-label">
-        <input
-          id="imageFile"
-          class="file-input"
-          type="file"
-          name="imageFile"
-          bind:files="{image}"
-          onchange="if (this.files.length > 0) document.getElementById('filename-imageFile').innerHTML = this.files[0].name; image = this.files[0]" />
-        <span class="file-cta">
-          <span class="file-icon"> <i class="fa fa-upload"></i> </span>
-          <span class="file-label" id="filename-imageFile"> Choose a file… </span>
-        </span>
-      </label>
-    </div>
-    -->
-
-    <!-- Prepended text
-    <label class="label" for="answerOptions">Answer options</label>
-    {#each fields as field, i (field.id)}
-      <div class="field has-addons">
-        <div class="control">
-          <input id="answerOptions" name="answerOptions" class="input " placeholder="placeholder" type="text" required
-                 bind:value={answerOptions[i]}>
-        </div>
-        {#if fields.length > 2}
-          <div class="control">
-            <a class="button is-danger"
-               on:click|preventDefault={()=>{if (fields.length > 2) fields.splice(i, 1); fields = fields}}>
-              delete
-            </a>
-          </div>
-        {/if}
-      </div>
-      <p class="help mb-3">Add answer options from two or more</p>
     {/each}
-    <button class="button is-primary mb-5" on:click|preventDefault={handleClick}>Add answer option</button>
-     -->
 
-    <!-- Textarea
-    <div class="field">
-      <label class="label" for="taskHint">Task hint</label>
-      <div class="control">
-        <textarea class="textarea" id="taskHint" name="solution" bind:value={taskHint}></textarea>
-      </div>
+    <!-- Button -->
+    <div class="field is-grouped mb-5">
+      <div class="control"><button class="button is-primary" on:click|preventDefault="{addField}">Add variant</button></div>
+      {#if fields.length > 1}
+        <div class="control"><button class="button is-danger" on:click|preventDefault="{removeField}">Remove variant</button></div>
+      {/if}
     </div>
-    -->
-
-    <!-- Textarea
-    <div class="field mb-5">
-      <label class="label" for="solution">Solution</label>
-      <div class="control">
-        <textarea class="textarea" id="solution" name="solution" bind:value={solution}></textarea>
-      </div>
-    </div>
-    -->
 
     <hr />
+
+    <div class="field mb-5">
+      <label class="label" for="image">Image url</label>
+      <div class="control">
+        <input id="image" name="answer" type="text" placeholder="image url" class="input" bind:value="{image}" />
+        <p class="help">Add image url</p>
+      </div>
+    </div>
+
+    <hr />
+
     <!-- Button -->
     <div class="field mb-5">
       <label class="label" for="submit"></label>
