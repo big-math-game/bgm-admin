@@ -10,10 +10,10 @@
   let id: string = Id()
   let theme: string = ''
   let description: string[] = []
-  let params: [{ name: string; min: number; max: number }] | null = [{ name: '', min: 1, max: 1 }]
   let image: string = ''
   let answer: string[] = []
-
+  let helpText: string = ''
+  let error = false
   let disabled
   $: disabled = !theme && !description.length > 0 && !answer.length > 0
 
@@ -28,17 +28,24 @@
   }
 
   const submitHandler = async () => {
-    const res = createTemplate(theme, description, answer, image)
-    console.log(res)
-
-    taskCreated = true
-    theme = ''
-    description = []
-    answer = []
-    fields = [{ id: Id() }]
-    setTimeout(() => {
-      taskCreated = false
-    }, 2000)
+    const res = await createTemplate(theme, description, answer, image)
+    if (res.result) {
+      taskCreated = true
+      error = false
+      helpText = 'Task added!'
+      theme = ''
+      description = []
+      answer = []
+      fields = [{ id: Id() }]
+      setTimeout(() => {
+        taskCreated = false
+        helpText = ''
+      }, 2000)
+    } else {
+      taskCreated = true
+      error = true
+      helpText = res.error
+    }
   }
 
   onMount(async () => {
@@ -127,7 +134,7 @@
           class="button is-success"
           disabled="{disabled}">{themeData === null ? 'Add theme' : 'submit'}</button>
         {#if taskCreated}
-          <p transition:fade="{{ duration: 250 }}" class="help has-text-success is-size-3">Task added!</p>
+          <p transition:fade="{{ duration: 250 }}" class="{`help ${error ? 'has-text-danger' : 'has-text-success'} is-size-3`}">{helpText}</p>
         {/if}
       </div>
     </div>

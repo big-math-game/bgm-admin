@@ -60,7 +60,7 @@ export const getThemeList = async () => {
 }
 
 export const createTemplate = async (theme_id: string, template: string[], answer: string[], image?: string) => {
-  const res = await createApiRequest(
+  return await createApiRequest(
     requestOptions(
       'MathAdminAPI.ModifyTemplate',
       image
@@ -77,7 +77,6 @@ export const createTemplate = async (theme_id: string, template: string[], answe
           }
     )
   )
-  return res.result
 }
 
 export const modifyTemplate = async (id: string, themeId: string, template: string[], answer: string[], position?: number, image?: string) => {
