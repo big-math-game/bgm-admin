@@ -30,11 +30,11 @@
 </script>
 
 <svelte:head>
-  <title>Tasks</title>
+  <title>Tasks manager</title>
 </svelte:head>
 
 <div class="mr-2">
-  <h3 class="title is-3">Tasks topic</h3>
+  <h3 class="title is-3">Tasks manager</h3>
 
   <div class="level">
     <div class="level-left">

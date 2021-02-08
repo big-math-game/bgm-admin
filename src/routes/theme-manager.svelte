@@ -5,13 +5,18 @@
   import Modal from '../components/common/modal/Modal.svelte'
   import EditThemeModalWindow from '../components/edit-theme-modal-window/EditThemeModalWindow.svelte'
 
+  let themes
   $: themes = $themesList
   let editThemeWindow: boolean = false
-  let searchTerm: string = ''
+  let searchTerm: string = ''.toLowerCase()
   let themeData: string = ''
+  let selectedIndex: number = 0
+  let searchProperties: string[] = ['name', 'description', 'id']
+  let selectedProperty: string = ''
 
+  let filteredList
   $: filteredList = themes
-    .filter((item) => item.name.indexOf(searchTerm) !== -1)
+    .filter((item) => item[selectedProperty ? selectedProperty : searchProperties[0]].indexOf(searchTerm) !== -1)
     .sort((a, b) => {
       if (a.name > b.name) return 1
       if (b.name < a.name) return -1
@@ -28,6 +33,21 @@
 </svelte:head>
 
 <h1 class="title is-4">Themes manager</h1>
+
+<div class="tabs">
+  <ul>
+    {#each searchProperties as property, i (i)}
+      <li class:is-active="{i === selectedIndex}">
+        <a
+          href=":"
+          on:click|preventDefault="{() => {
+            selectedIndex = i
+            selectedProperty = property
+          }}">{property}</a>
+      </li>
+    {/each}
+  </ul>
+</div>
 
 <p class="control has-icons-left mb-3">
   <label><input class="input is-primary" type="text" placeholder="Search" bind:value="{searchTerm}" /></label>
