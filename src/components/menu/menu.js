@@ -9,14 +9,14 @@ const Menu = [
         link: '/'
       },
       {
-        id: 'Add-list',
-        name: 'Add task list',
-        link: 'add-task-list'
+        id: 'publish-tasks-list',
+        name: 'Publish tasks list',
+        link: 'publish-tasks-list'
       },
       {
-        id: 'lists-manager',
-        name: 'Lists manager',
-        link: 'lists-manager'
+        id: 'generate-tasks',
+        name: 'Generate tasks',
+        link: 'generate-tasks'
       },
       {
         id: 'create-theme',

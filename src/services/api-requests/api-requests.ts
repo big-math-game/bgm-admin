@@ -15,13 +15,34 @@ export function requestOptions(method: string, params?): fetchOptions {
   }
 }
 
+export const createListsForAll = async (themeId: string, listName: string) => {
+  return await createApiRequest(
+    requestOptions('MathAdminAPI.CreateListsForAll', {
+      theme_id: themeId,
+      list_name: listName
+    })
+  )
+}
+
 export const createTheme = async (name: string, description?: string) => {
-  const res = await createApiRequest(requestOptions('MathAdminAPI.ModifyTheme', { name: name, description: description }))
+  const res = await createApiRequest(
+    requestOptions('MathAdminAPI.ModifyTheme', {
+      name: name,
+      description: description
+    })
+  )
   return res.result
 }
 
 export const modifyTheme = async (id: string, name: string, description: string, level?: number) => {
-  const res = await createApiRequest(requestOptions('MathAdminAPI.ModifyTheme', { id: id, name: name, description: description, level: level }))
+  const res = await createApiRequest(
+    requestOptions('MathAdminAPI.ModifyTheme', {
+      id: id,
+      name: name,
+      description: description,
+      level: level
+    })
+  )
   return res.result
 }
 
