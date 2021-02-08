@@ -24,6 +24,14 @@ export const createListsForAll = async (themeId: string, listName: string) => {
   )
 }
 
+export const generateTasksForTheme = async (themeId: string) => {
+  return await createApiRequest(
+    requestOptions('MathAdminAPI.GenerateTasksForTheme', {
+      theme_id: themeId
+    })
+  )
+}
+
 export const createTheme = async (name: string, description?: string) => {
   const res = await createApiRequest(
     requestOptions('MathAdminAPI.ModifyTheme', {
