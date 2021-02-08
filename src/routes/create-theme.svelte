@@ -7,6 +7,10 @@
   let themeCreated: boolean = false
 </script>
 
+<svelte:head>
+  <title>Create theme</title>
+</svelte:head>
+
 <h3 class="title is-3">Create theme</h3>
 
 <div class="theme-edit-window">
