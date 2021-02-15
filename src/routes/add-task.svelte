@@ -32,7 +32,7 @@
     if (res.result) {
       taskCreated = true
       error = false
-      helpText = 'Task added!'
+      helpText = 'Шаблон добавлен!'
       theme = ''
       description = []
       answer = []
@@ -54,17 +54,17 @@
 </script>
 
 <svelte:head>
-  <title>Add tasks</title>
+  <title>Добавить шаблон задачи</title>
 </svelte:head>
 
-<h3 class="title is-3">Added task</h3>
+<h3 class="title is-3">Добавить шаблон задачи</h3>
 
 <form class="form-horizontal" enctype="multipart/form-data" on:submit|preventDefault="{submitHandler}">
   <fieldset class="fieldset mr-2">
     <!-- Select Basic -->
     <div class="field is-horizontal">
       <div class="field">
-        <label class="label" for="topic">Select theme</label>
+        <label class="label" for="topic">Выберите тему</label>
         <div class="control">
           <div class="select">
             <select id="topic" name="topic" bind:value="{theme}" required>
@@ -87,17 +87,17 @@
     {#each fields as field, i (field.id)}
       <!-- Textarea -->
       <div class="field mb-5">
-        <label class="label" for="{`task-${i}`}">Enter description {i + 1}</label>
+        <label class="label" for="{`task-${i}`}">Описание задачи {i + 1}</label>
         <div class="control">
-          <textarea class="textarea" id="{`task-${i}`}" name="task" bind:value="{description[i]}" required placeholder="description"></textarea>
+          <textarea class="textarea" id="{`task-${i}`}" name="task" bind:value="{description[i]}" required placeholder="Описание"></textarea>
         </div>
       </div>
 
       <!-- Text input-->
       <div class="field mb-5">
-        <label class="label" for="{`answer-${i}`}">Answer {i + 1}</label>
+        <label class="label" for="{`answer-${i}`}">Ответ {i + 1}</label>
         <div class="control">
-          <input id="{`answer-${i}`}" name="answer" type="text" placeholder="answer" class="input" bind:value="{answer[i]}" required />
+          <input id="{`answer-${i}`}" name="answer" type="text" placeholder="Ответ" class="input" bind:value="{answer[i]}" required />
           <p class="help">Add answer {i + 1}</p>
         </div>
       </div>
@@ -105,7 +105,7 @@
 
     <!-- Button -->
     <div class="field is-grouped mb-5">
-      <div class="control"><button class="button is-primary" on:click|preventDefault="{addField}">Add variant</button></div>
+      <div class="control"><button class="button is-primary" on:click|preventDefault="{addField}">Добавить вариант</button></div>
       {#if fields.length > 1}
         <div class="control"><button class="button is-danger" on:click|preventDefault="{removeField}">Remove variant</button></div>
       {/if}
@@ -114,11 +114,8 @@
     <hr />
 
     <div class="field mb-5">
-      <label class="label" for="image">Image url</label>
-      <div class="control">
-        <input id="image" name="answer" type="text" placeholder="image url" class="input" bind:value="{image}" />
-        <p class="help">Add image url</p>
-      </div>
+      <label class="label" for="image">Ссылка на картинку</label>
+      <div class="control"><input id="image" name="answer" type="text" placeholder="ссылка" class="input" bind:value="{image}" /></div>
     </div>
 
     <hr />
@@ -127,12 +124,7 @@
     <div class="field mb-5">
       <label class="label" for="submit"></label>
       <div class="control">
-        <button
-          id="submit"
-          name="submit"
-          type="submit"
-          class="button is-success"
-          disabled="{disabled}">{themeData === null ? 'Add theme' : 'submit'}</button>
+        <button id="submit" name="submit" type="submit" class="button is-success" disabled="{disabled}">Добавить</button>
         {#if taskCreated}
           <p transition:fade="{{ duration: 250 }}" class="{`help ${error ? 'has-text-danger' : 'has-text-success'} is-size-3`}">{helpText}</p>
         {/if}

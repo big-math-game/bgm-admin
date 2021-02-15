@@ -8,10 +8,10 @@
 </script>
 
 <svelte:head>
-  <title>Create theme</title>
+  <title>Добавить тему</title>
 </svelte:head>
 
-<h3 class="title is-3">Create theme</h3>
+<h3 class="title is-3">Добавить тему</h3>
 
 <div class="theme-edit-window">
   <form
@@ -20,21 +20,22 @@
     on:submit|preventDefault="{async () => {
       if (name && description) {
         const res = await createTheme(name, description)
-        console.log(res)
-        themeCreated = true
-        name = ''
-        description = ''
-        setTimeout(() => {
-          themeCreated = false
-        }, 2000)
+        if (res) {
+          themeCreated = true
+          name = ''
+          description = ''
+          setTimeout(() => {
+            themeCreated = false
+          }, 2000)
+        }
       }
     }}">
     <fieldset class="fieldset mr-2">
       <!-- Text input-->
       <div class="field mb-5">
-        <label class="label" for="theme-name">Theme name</label>
+        <label class="label" for="theme-name">Имя темы</label>
         <div class="control">
-          <input id="theme-name" name="answer" type="text" placeholder="theme name" class="input" bind:value="{name}" required />
+          <input id="theme-name" name="answer" type="text" placeholder="Имя темы" class="input" bind:value="{name}" required />
         </div>
       </div>
 
@@ -42,15 +43,9 @@
 
       <!-- Textarea -->
       <div class="field mb-5">
-        <label class="label" for="theme-description">Enter description</label>
+        <label class="label" for="theme-description">Описание темы</label>
         <div class="control">
-          <textarea
-            class="textarea"
-            id="theme-description"
-            name="task"
-            placeholder="theme description"
-            bind:value="{description}"
-            required></textarea>
+          <textarea class="textarea" id="theme-description" name="task" placeholder="Описание темы" bind:value="{description}" required></textarea>
         </div>
       </div>
 
@@ -60,7 +55,7 @@
       <div class="field mb-5">
         <label class="label" for="submit"></label>
         <div class="control">
-          <button id="submit" name="submit" type="submit" class="button is-success">Add theme </button>
+          <button id="submit" name="submit" type="submit" class="button is-success">Добавить тему</button>
           {#if themeCreated}
             <p transition:fade="{{ duration: 250 }}" class="help has-text-success is-size-3">Theme created!</p>
           {/if}

@@ -54,6 +54,11 @@ export const modifyTheme = async (id: string, name: string, description: string,
   return res.result
 }
 
+export const getTheme = async (themeId) => {
+  const res = await createApiRequest(requestOptions('MathAdminAPI.GetTheme', { theme_id: themeId }))
+  return res.result
+}
+
 export const getThemeList = async () => {
   const res = await createApiRequest(requestOptions('MathAdminAPI.GetThemeList'))
   return res.result
@@ -101,4 +106,8 @@ export const getTemplate = async (taskId) => {
 export const getTemplateList = async (themeId) => {
   const res = await createApiRequest(requestOptions('MathAdminAPI.GetTemplateList', { theme_id: themeId }))
   return res.result
+}
+
+export const generateTasksFromTemplate = async (templateId) => {
+  return await createApiRequest(requestOptions('MathAdminAPI.GenerateTasksFromTemplate', { template_id: templateId }))
 }

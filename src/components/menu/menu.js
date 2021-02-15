@@ -1,42 +1,32 @@
 const Menu = [
   {
     id: 'GENERAL',
-    label: 'Menu',
+    label: 'Меню',
     links: [
       {
         id: 'Dashboard',
-        name: 'Dashboard',
+        name: 'Статистика',
         link: '/'
       },
       {
         id: 'publish-tasks-list',
-        name: 'Publish tasks list',
+        name: 'Опубликовать шаблон с задачами',
         link: 'publish-tasks-list'
       },
       {
-        id: 'generate-tasks',
-        name: 'Generate tasks',
-        link: 'generate-tasks'
+        id: 'themes-and-tasks',
+        name: 'Темы и Шаблоны задач',
+        link: 'themes-and-tasks'
       },
       {
         id: 'create-theme',
-        name: 'Create theme',
+        name: 'Добавить тему',
         link: 'create-theme'
       },
       {
-        id: 'theme-manager',
-        name: 'Theme manager',
-        link: 'theme-manager'
-      },
-      {
         id: 'addTask',
-        name: 'Add task',
+        name: 'Добавить шаблон задачи',
         link: 'add-task'
-      },
-      {
-        id: 'Tasks',
-        name: 'Tasks-manager',
-        link: 'tasks-manager'
       }
     ]
   }

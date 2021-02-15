@@ -56,7 +56,7 @@
           <label class="label" for="topic">Select theme</label>
           <div class="control">
             <div class="select">
-              <select id="topic" name="topic" bind:value="{theme}" required>
+              <select id="topic" name="topic" bind:value="{theme}" required disabled="{params !== null}">
                 {#if themes}
                   <option selected disabled></option>
                   {#each themes as theme (theme.id)}
@@ -77,7 +77,7 @@
         <label class="label" for="listNumber">Select list task position</label>
         <div class="control">
           <div class="select">
-            <select id="listNumber" name="listNumber" bind:value="{position}">
+            <select id="listNumber" name="listNumber" bind:value="{position}" disabled="{params !== null}">
               <option>0</option>
               <option>1</option>
               <option>2</option>
@@ -98,33 +98,45 @@
         <!-- Textarea -->
         <div class="field mb-5">
           <label class="label" for="{`task-${i}`}">Enter description {i + 1}</label>
-          <div class="control"><textarea class="textarea" id="{`task-${i}`}" name="task" bind:value="{description}" required></textarea></div>
+          <div class="control">
+            <textarea class="textarea" id="{`task-${i}`}" name="task" bind:value="{description}" required disabled="{params !== null}"></textarea>
+          </div>
         </div>
 
         <!-- Text input-->
         <div class="field mb-5">
           <label class="label" for="{`answer-${i}`}">Answer {i + 1}</label>
           <div class="control">
-            <input id="{`answer-${i}`}" name="answer" type="text" placeholder="placeholder" class="input" bind:value="{answer[i]}" required />
+            <input
+              id="{`answer-${i}`}"
+              name="answer"
+              type="text"
+              placeholder="placeholder"
+              class="input"
+              bind:value="{answer[i]}"
+              required
+              disabled="{params !== null}" />
             <p class="help">Add answer {i + 1}</p>
           </div>
         </div>
       {/each}
 
       <!-- Button -->
-      <div class="field is-grouped mb-5">
-        <div class="control"><button class="button is-primary" on:click|preventDefault="{addField}">Add variant</button></div>
-        {#if fields.length > 1}
-          <div class="control"><button class="button is-danger" on:click|preventDefault="{removeField}">Remove variant</button></div>
-        {/if}
-      </div>
+      {#if params === null}
+        <div class="field is-grouped mb-5">
+          <div class="control"><button class="button is-primary" on:click|preventDefault="{addField}">Add variant</button></div>
+          {#if fields.length > 1}
+            <div class="control"><button class="button is-danger" on:click|preventDefault="{removeField}">Remove variant</button></div>
+          {/if}
+        </div>
+      {/if}
 
       <hr />
 
       <div class="field mb-5">
         <label class="label" for="image">Image url</label>
         <div class="control">
-          <input id="image" name="answer" type="text" placeholder="image url" class="input" bind:value="{image}" />
+          <input id="image" name="answer" type="text" placeholder="image url" class="input" bind:value="{image}" disabled="{params !== null}" />
           <p class="help">Add image url</p>
         </div>
       </div>
@@ -132,20 +144,22 @@
       <hr />
 
       <!-- Button -->
-      <div class="field mb-5">
-        <label class="label" for="submit"></label>
-        <div class="control">
-          <button
-            id="submit"
-            name="submit"
-            type="submit"
-            class="button is-success"
-            disabled="{disabled}">{themes === null ? 'Add theme' : 'save'}</button>
-          {#if taskSaved}
-            <p transition:fade="{{ duration: 250 }}" class="help has-text-success is-size-3">Task saved!</p>
-          {/if}
+      {#if params === null}
+        <div class="field mb-5">
+          <label class="label" for="submit"></label>
+          <div class="control">
+            <button
+              id="submit"
+              name="submit"
+              type="submit"
+              class="button is-success"
+              disabled="{disabled}">{themes === null ? 'Add theme' : 'save'}</button>
+            {#if taskSaved}
+              <p transition:fade="{{ duration: 250 }}" class="help has-text-success is-size-3">Task saved!</p>
+            {/if}
+          </div>
         </div>
-      </div>
+      {/if}
     </fieldset>
   </form>
 </div>
