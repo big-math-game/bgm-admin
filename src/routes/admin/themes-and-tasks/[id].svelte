@@ -1,6 +1,6 @@
 <script context="module">
-  import { url } from '../../requestsUrl'
-  import Id from '../../services/randomUID'
+  import { url } from '../../../requestsUrl'
+  import Id from '../../../services/randomUID'
 
   export async function preload({ params }) {
     const { id } = params
@@ -25,10 +25,10 @@
 
 <script>
   import { onMount } from 'svelte'
-  import { templateList, theme } from '../../store/store'
-  import { generateTasksForTheme, getTemplate, getTemplateList, getTheme, getThemeList } from '../../services/api-requests/api-requests'
-  import Modal from '../../components/common/modal/Modal.svelte'
-  import EditTaskWindow from '../../components/edit-task-window/EditTaskWindow.svelte'
+  import { templateList, theme } from '../../../store/store'
+  import { generateTasksForTheme, getTemplate, getTemplateList, getTheme, getThemeList } from '../../../services/api-requests/api-requests'
+  import Modal from '../../../components/common/modal/Modal.svelte'
+  import EditTaskWindow from '../../../components/edit-task-window/EditTaskWindow.svelte'
 
   export let themeData = { result: {} }
   let themes = []
