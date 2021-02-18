@@ -1,4 +1,4 @@
-let url = 'http://localhost:8082'
+import { url } from '../requestsUrl'
 
 export async function createApiRequest(body) {
   const request = await fetch(url, {

@@ -20,8 +20,8 @@ export type task = {
   id: string
   theme_id: string
   answer_type: number
-  description: string
-  answer: string
+  template: string[]
+  answer: string[]
   image?: string | null
   difficulty: number
   position: number

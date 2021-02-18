@@ -15,8 +15,8 @@
     }, 1000)
   })
 
-  let topic = ''
-  let filteredTasks = []
+  // let topic = ''
+  // let filteredTasks = []
 </script>
 
 <svelte:head>
@@ -44,54 +44,54 @@
         </div>
       </div>
 
-      <div class="column">
-        <div class="box notification">
-          <div class="title">Topic</div>
-          {#if themeData !== null}
-            <div class="select mb-3">
-              <label>
-                <select
-                  bind:value="{topic}"
-                  on:change="{() => {
-                    filteredTasks = [...tasksData.filter((task) => task.theme_id === topic)]
-                  }}">
-                  <option selected disabled></option>
-                  {#each themeData as topic (topic.id)}
-                    <option value="{topic.id}">{topic.theme}</option>
-                  {/each}
-                </select>
-              </label>
-            </div>
-          {/if}
+      <!--      <div class="column">-->
+      <!--        <div class="box notification">-->
+      <!--          <div class="title">Topic</div>-->
+      <!--          {#if themeData !== null}-->
+      <!--            <div class="select mb-3">-->
+      <!--              <label>-->
+      <!--                <select-->
+      <!--                  bind:value="{topic}"-->
+      <!--                  on:change="{() => {-->
+      <!--                    filteredTasks = [...tasksData.filter((task) => task.theme_id === topic)]-->
+      <!--                  }}">-->
+      <!--                  <option selected disabled></option>-->
+      <!--                  {#each themeData as topic (topic.id)}-->
+      <!--                    <option value="{topic.id}">{topic.theme}</option>-->
+      <!--                  {/each}-->
+      <!--                </select>-->
+      <!--              </label>-->
+      <!--            </div>-->
+      <!--          {/if}-->
 
-          <div class="level">
-            <div class="level-item">
-              <div>
-                <div class="heading">Total tasks</div>
-                <div class="title is-5">{filteredTasks.length}</div>
-              </div>
-            </div>
-            <div class="level-item">
-              <div>
-                <div class="heading">Easy task</div>
-                <div class="title is-5">{filteredTasks.filter((task) => task.difficulty === 0).length}</div>
-              </div>
-            </div>
-            <div class="level-item">
-              <div>
-                <div class="heading">Normal task</div>
-                <div class="title is-5">{filteredTasks.filter((task) => task.difficulty === 1).length}</div>
-              </div>
-            </div>
-            <div class="level-item">
-              <div>
-                <div class="heading">Hard task</div>
-                <div class="title is-5">{filteredTasks.filter((task) => task.difficulty === 2).length}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!--          <div class="level">-->
+      <!--            <div class="level-item">-->
+      <!--              <div>-->
+      <!--                <div class="heading">Total tasks</div>-->
+      <!--                <div class="title is-5">{filteredTasks.length}</div>-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--            <div class="level-item">-->
+      <!--              <div>-->
+      <!--                <div class="heading">Easy task</div>-->
+      <!--                <div class="title is-5">{filteredTasks.filter((task) => task.difficulty === 0).length}</div>-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--            <div class="level-item">-->
+      <!--              <div>-->
+      <!--                <div class="heading">Normal task</div>-->
+      <!--                <div class="title is-5">{filteredTasks.filter((task) => task.difficulty === 1).length}</div>-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--            <div class="level-item">-->
+      <!--              <div>-->
+      <!--                <div class="heading">Hard task</div>-->
+      <!--                <div class="title is-5">{filteredTasks.filter((task) => task.difficulty === 2).length}</div>-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
     {/if}
   </div>
 </div>
