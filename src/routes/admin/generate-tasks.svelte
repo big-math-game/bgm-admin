@@ -1,21 +1,19 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { fade } from 'svelte/transition'
-  import { createListsForAll, getThemeList } from '../services/api-requests/api-requests'
-  import { themesList } from '../store/store'
+  import { generateTasksForTheme, getThemeList } from '../../services/api-requests/api-requests'
+  import { themesList } from '../../store/store'
 
   let theme: string = ''
-  let listName: string = ''
   let helpMessage: boolean = false
   let helpText: string = ''
   let error = false
 
   const submitHandler = async () => {
-    const res = await createListsForAll(theme, listName)
+    const res = await generateTasksForTheme(theme)
     if (res.result) {
       error = false
-      helpText = 'List published!'
-      listName = ''
+      helpText = `Generated ${res.result} Tasks`
       theme = ''
       helpMessage = true
       setTimeout(() => {
@@ -34,10 +32,10 @@
 </script>
 
 <svelte:head>
-  <title>Publish tasks list</title>
+  <title>Generate tasks</title>
 </svelte:head>
 
-<h3 class="title is-3">Publish a list with tasks for players</h3>
+<h3 class="title is-3">Generate tasks</h3>
 
 <form class="form-horizontal" enctype="multipart/form-data" on:submit|preventDefault="{submitHandler}">
   <fieldset class="fieldset mr-2">
@@ -59,22 +57,6 @@
             </select>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Text input-->
-    <div class="field mb-5">
-      <label class="label" for="task-list-name">Task list title</label>
-      <div class="control">
-        <input
-          id="task-list-name"
-          name="task-list-name"
-          type="text"
-          placeholder="Enter task list name"
-          class="input"
-          bind:value="{listName}"
-          required />
-        <p class="help">Add title</p>
       </div>
     </div>
 

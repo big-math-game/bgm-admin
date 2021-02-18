@@ -11,22 +11,22 @@ const Menu = [
       {
         id: 'publish-tasks-list',
         name: 'Опубликовать шаблон с задачами',
-        link: 'publish-tasks-list'
+        link: '/admin/publish-tasks-list'
       },
       {
         id: 'themes-and-tasks',
         name: 'Темы и Шаблоны задач',
-        link: 'themes-and-tasks'
+        link: '/admin/themes-and-tasks'
       },
       {
         id: 'create-theme',
         name: 'Добавить тему',
-        link: 'create-theme'
+        link: '/admin/create-theme'
       },
       {
         id: 'addTask',
         name: 'Добавить шаблон задачи',
-        link: 'add-task'
+        link: '/admin/add-task'
       }
     ]
   }

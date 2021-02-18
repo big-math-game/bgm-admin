@@ -1,6 +1,6 @@
 <script context="module">
-  import { url } from '../../../requestsUrl'
-  import Id from '../../../services/randomUID'
+  import { url } from '../../../../requestsUrl'
+  import Id from '../../../../services/randomUID'
 
   export async function preload({ params }) {
     const { task_id } = params
@@ -24,8 +24,8 @@
 </script>
 
 <script>
-  import { generateTasksFromTemplate, getTemplate } from '../../../services/api-requests/api-requests'
-  import { task, theme } from '../../../store/store'
+  import { generateTasksFromTemplate, getTemplate } from '../../../../services/api-requests/api-requests'
+  import { task, theme } from '../../../../store/store'
   import { onMount } from 'svelte'
 
   export let taskData = { result: {} }

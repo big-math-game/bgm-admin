@@ -1,10 +1,10 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import Modal from '../components/common/modal/Modal.svelte'
-  import DeleteTaskWindow from '../components/delete-task-window/DeleteTaskWindow.svelte'
-  import EditTaskWindow from '../components/edit-task-window/EditTaskWindow.svelte'
-  import { getTemplateList, getTemplate, getThemeList } from '../services/api-requests/api-requests'
-  import { templateList } from '../store/store'
+  import Modal from '../../components/common/modal/Modal.svelte'
+  import DeleteTaskWindow from '../../components/delete-task-window/DeleteTaskWindow.svelte'
+  import EditTaskWindow from '../../components/edit-task-window/EditTaskWindow.svelte'
+  import { getTemplateList, getTemplate, getThemeList } from '../../services/api-requests/api-requests'
+  import { templateList } from '../../store/store'
 
   let themes = []
   let theme: string = 'all'

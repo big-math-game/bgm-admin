@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { getThemeList } from '../services/api-requests/api-requests'
-  import { themesList } from '../store/store'
-  import Modal from '../components/common/modal/Modal.svelte'
-  import EditThemeModalWindow from '../components/edit-theme-modal-window/EditThemeModalWindow.svelte'
+  import { getThemeList } from '../../../services/api-requests/api-requests'
+  import { themesList } from '../../../store/store'
+  import Modal from '../../../components/common/modal/Modal.svelte'
+  import EditThemeModalWindow from '../../../components/edit-theme-modal-window/EditThemeModalWindow.svelte'
 
   let themes
   $: themes = $themesList
@@ -29,10 +29,19 @@
 </script>
 
 <svelte:head>
-  <title>Themes manager</title>
+  <title>Темы и шаблоны задач</title>
 </svelte:head>
 
-<h1 class="title is-4">Themes manager</h1>
+<div class="level">
+  <div class="level-left">
+    <div class="level-item">
+      <h1 class="title is-4">Темы и шаблоны задач</h1>
+    </div>
+  </div>
+  <div class="level-right">
+    <div class="level-item"><a href="create-theme" class="button is-primary">Добавить тему</a></div>
+  </div>
+</div>
 
 <div class="tabs">
   <ul>
@@ -68,10 +77,10 @@
     <tbody>
       {#each filteredList as theme, i (theme.id)}
         <tr>
-          <th>{theme.id}</th>
-          <th>{theme.level}</th>
-          <th>{theme.name}</th>
-          <th>{theme.description}</th>
+          <th><a class="theme-link" href="{`themes-and-tasks/${theme.id}`}">{theme.id}</a></th>
+          <th><a class="theme-link" href="{`themes-and-tasks/${theme.id}`}">{theme.level}</a></th>
+          <th><a class="theme-link" href="{`themes-and-tasks/${theme.id}`}">{theme.name}</a></th>
+          <th><a class="theme-link" href="{`themes-and-tasks/${theme.id}`}">{theme.description}</a></th>
           <td
             class="button is-primary is-small ml-2 mt-1"
             on:click="{() => {
@@ -102,5 +111,9 @@
 <style>
   abbr {
     text-decoration: none;
+  }
+
+  .theme-link {
+    color: #333333;
   }
 </style>
