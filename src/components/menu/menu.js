@@ -6,7 +6,7 @@ const Menu = [
       {
         id: 'Dashboard',
         name: 'Статистика',
-        link: '/'
+        link: '/admin'
       },
       {
         id: 'publish-tasks-list',
