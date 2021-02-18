@@ -25,7 +25,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: npm run export -- --basepath admin
+    - run: npm run export -- --entry "/admin"
 
     - name: Set global environment variables
       id: global_env

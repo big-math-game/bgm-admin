@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade } from 'svelte/transition'
-  import { createTheme } from '../../services/api-requests/api-requests'
+  import { createTheme } from '../services/api-requests/api-requests'
 
   let name: string = ''
   let description: string = ''

@@ -1,6 +1,6 @@
 <script lang="ts">
   import 'bulma/css/bulma.css'
-  import Menu from '../../components/menu/Menu.svelte'
+  import Menu from '../components/menu/Menu.svelte'
 
   export let segment: string
 </script>

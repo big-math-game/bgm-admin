@@ -6,27 +6,27 @@ const Menu = [
       {
         id: 'Dashboard',
         name: 'Статистика',
-        link: '/admin'
+        link: '/'
       },
       {
         id: 'publish-tasks-list',
         name: 'Опубликовать шаблон с задачами',
-        link: '/admin/publish-tasks-list'
+        link: '/publish-tasks-list'
       },
       {
         id: 'themes-and-tasks',
         name: 'Темы и Шаблоны задач',
-        link: '/admin/themes-and-tasks'
+        link: '/themes-and-tasks'
       },
       {
         id: 'create-theme',
         name: 'Добавить тему',
-        link: '/admin/create-theme'
+        link: '/create-theme'
       },
       {
         id: 'addTask',
         name: 'Добавить шаблон задачи',
-        link: '/admin/add-task'
+        link: '/add-task'
       }
     ]
   }

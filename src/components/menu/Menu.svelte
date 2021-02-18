@@ -4,7 +4,7 @@
   export let segment = ''
   const getUrl = (url) => {
     if (!url) {
-      return '/admin'
+      return '/'
     }
     return url
   }

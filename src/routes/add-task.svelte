@@ -1,9 +1,9 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import Id from '../../services/randomUID.ts'
-  import type { themeList } from '../../types/tasks.type'
+  import Id from '../services/randomUID.ts'
+  import type { themeList } from '../types/tasks.type'
   import { fade } from 'svelte/transition'
-  import { createTemplate, getThemeList } from '../../services/api-requests/api-requests'
+  import { createTemplate, getThemeList } from '../services/api-requests/api-requests'
 
   let themeData: themeList[] = []
   let taskCreated: boolean = false
