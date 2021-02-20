@@ -14,7 +14,7 @@
     const res = await createListsForAll(theme, listName)
     if (res.result) {
       error = false
-      helpText = 'List published!'
+      helpText = 'Опубликовано!'
       listName = ''
       theme = ''
       helpMessage = true
@@ -37,14 +37,14 @@
   <title>Publish tasks list</title>
 </svelte:head>
 
-<h3 class="title is-3">Publish a list with tasks for players</h3>
+<h3 class="title is-3">Опубликовать шаблон с задачами</h3>
 
 <form class="form-horizontal" enctype="multipart/form-data" on:submit|preventDefault="{submitHandler}">
   <fieldset class="fieldset mr-2">
     <!-- Select Basic -->
     <div class="field is-horizontal">
       <div class="field">
-        <label class="label" for="topic">Select theme</label>
+        <label class="label" for="topic">Выберите тему</label>
         <div class="control">
           <div class="select">
             <select id="topic" name="topic" bind:value="{theme}" required>
@@ -64,17 +64,9 @@
 
     <!-- Text input-->
     <div class="field mb-5">
-      <label class="label" for="task-list-name">Task list title</label>
+      <label class="label" for="task-list-name">Заголовок темы</label>
       <div class="control">
-        <input
-          id="task-list-name"
-          name="task-list-name"
-          type="text"
-          placeholder="Enter task list name"
-          class="input"
-          bind:value="{listName}"
-          required />
-        <p class="help">Add title</p>
+        <input id="task-list-name" name="task-list-name" type="text" placeholder="заголовок" class="input" bind:value="{listName}" required />
       </div>
     </div>
 
@@ -82,7 +74,7 @@
     <div class="field mb-5">
       <label class="label" for="submit"></label>
       <div class="control">
-        <button id="submit" name="submit" type="submit" class="button is-success">Submit</button>
+        <button id="submit" name="submit" type="submit" class="button is-success">Опубликовать</button>
         {#if helpMessage}
           <p transition:fade="{{ duration: 250 }}" class="{`help ${error ? 'has-text-danger' : 'has-text-success'} is-size-3`}">{helpText}</p>
         {/if}
