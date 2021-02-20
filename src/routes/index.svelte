@@ -10,11 +10,12 @@
     tasksData = JSON.parse(localStorage.getItem('task'))
     themeData = JSON.parse(localStorage.getItem('theme'))
 
+    console.log(location.host)
+
     setInterval(() => {
       date = new Date().toISOString().split('T')[1].split('.')[0]
     }, 1000)
   })
-
   // let topic = ''
   // let filteredTasks = []
 </script>

@@ -1,1 +1,1 @@
-export const url = 'http://localhost:8082'
+export const url = '/admin_api' //dev http://localhost:8082
