@@ -119,10 +119,10 @@
   <table class="table is-bordered">
     <thead>
       <tr>
-        <th title="Task id"><abbr title="Id">Id</abbr></th>
-        <th title="Theme"><abbr>Theme Id</abbr></th>
-        <th title="Position"><abbr title="Position">Pos</abbr></th>
-        <th title="Task description"><abbr title="Description">Description variants</abbr></th>
+        <!--        <th title="Task id"><abbr title="Id">Id</abbr></th>-->
+        <!--        <th title="Theme"><abbr>Theme Id</abbr></th>-->
+        <th title="Позиция"><abbr title="Position">Позиция</abbr></th>
+        <th title="Содержание"><abbr title="Description">Содержание</abbr></th>
       </tr>
     </thead>
 
@@ -130,8 +130,8 @@
       <tbody>
         {#each $templateList as task, i (task.id)}
           <tr>
-            <th><a class="theme-link" href="{`themes-and-tasks/${id}/${task.id}`}">{task.id}</a></th>
-            <th><a class="theme-link" href="{`themes-and-tasks/${id}/${task.id}`}">{task.theme_id}</a></th>
+            <!--            <th><a class="theme-link" href="{`themes-and-tasks/${id}/${task.id}`}">{task.id}</a></th>-->
+            <!--            <th><a class="theme-link" href="{`themes-and-tasks/${id}/${task.id}`}">{task.theme_id}</a></th>-->
             <th><a class="theme-link" href="{`themes-and-tasks/${id}/${task.id}`}">{task.position}</a></th>
             <th><a class="theme-link" href="{`themes-and-tasks/${id}/${task.id}`}">{task.template[0]}</a></th>
             <td

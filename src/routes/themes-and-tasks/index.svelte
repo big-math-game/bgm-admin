@@ -11,7 +11,7 @@
   let searchTerm: string = ''.toLowerCase()
   let themeData: string = ''
   let selectedIndex: number = 0
-  let searchProperties: string[] = ['name', 'description', 'id']
+  let searchProperties: string[] = ['name', 'description']
   let selectedProperty: string = ''
 
   let filteredList
@@ -67,17 +67,17 @@
   <table class="table is-bordered">
     <thead>
       <tr>
-        <th title="Theme id"><abbr title="Id">Id</abbr></th>
-        <th title="Theme level"><abbr>Level</abbr></th>
-        <th title="Name"><abbr title="Position">Name</abbr></th>
-        <th title="Theme description"><abbr title="Description">Description</abbr></th>
+        <!--        <th title="Theme id"><abbr title="Id">Id</abbr></th>-->
+        <th title="Сложность темы"><abbr>Сложность темы</abbr></th>
+        <th title="Имя темы"><abbr title="Position">Имя темы</abbr></th>
+        <th title="Описание темы"><abbr title="Description">Описание темы</abbr></th>
       </tr>
     </thead>
 
     <tbody>
       {#each filteredList as theme, i (theme.id)}
         <tr>
-          <th><a class="theme-link" href="{`themes-and-tasks/${theme.id}`}">{theme.id}</a></th>
+          <!--          <th><a class="theme-link" href="{`themes-and-tasks/${theme.id}`}">{theme.id}</a></th>-->
           <th><a class="theme-link" href="{`themes-and-tasks/${theme.id}`}">{theme.level}</a></th>
           <th><a class="theme-link" href="{`themes-and-tasks/${theme.id}`}">{theme.name}</a></th>
           <th><a class="theme-link" href="{`themes-and-tasks/${theme.id}`}">{theme.description}</a></th>
