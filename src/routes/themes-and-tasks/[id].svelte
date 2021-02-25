@@ -163,6 +163,9 @@
 {/if}
 
 <style>
+  abbr {
+    text-decoration: none;
+  }
   .theme-link {
     color: #333333;
   }
