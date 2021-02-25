@@ -121,8 +121,8 @@
       <tr>
         <!--        <th title="Task id"><abbr title="Id">Id</abbr></th>-->
         <!--        <th title="Theme"><abbr>Theme Id</abbr></th>-->
-        <th title="Позиция"><abbr title="Position">Позиция</abbr></th>
-        <th title="Содержание"><abbr title="Description">Содержание</abbr></th>
+        <th title="Позиция"><abbr>Позиция</abbr></th>
+        <th title="Содержание"><abbr>Содержание</abbr></th>
       </tr>
     </thead>
 

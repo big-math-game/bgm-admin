@@ -69,8 +69,8 @@
       <tr>
         <!--        <th title="Theme id"><abbr title="Id">Id</abbr></th>-->
         <th title="Сложность темы"><abbr>Сложность темы</abbr></th>
-        <th title="Имя темы"><abbr title="Position">Имя темы</abbr></th>
-        <th title="Описание темы"><abbr title="Description">Описание темы</abbr></th>
+        <th title="Имя темы"><abbr>Имя темы</abbr></th>
+        <th title="Описание темы"><abbr>Описание темы</abbr></th>
       </tr>
     </thead>
 
