@@ -77,10 +77,10 @@
     <tbody>
       {#each filteredList as theme, i (theme.id)}
         <tr>
-          <!--          <th><a class="theme-link" href="{`themes-and-tasks/${theme.id}`}">{theme.id}</a></th>-->
-          <th><a class="theme-link" href="{`themes-and-tasks/${theme.id}`}">{theme.level}</a></th>
-          <th><a class="theme-link" href="{`themes-and-tasks/${theme.id}`}">{theme.name}</a></th>
-          <th><a class="theme-link" href="{`themes-and-tasks/${theme.id}`}">{theme.description}</a></th>
+          <!--          <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.id}</a></th>-->
+          <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.level}</a></th>
+          <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.name}</a></th>
+          <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.description}</a></th>
           <td
             class="button is-primary is-small ml-2 mt-1"
             on:click="{() => {

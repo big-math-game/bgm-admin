@@ -65,10 +65,7 @@
   })
 </script>
 
-<a class="button is-link mb-3" href="themes-and-tasks">
-  <span class="icon is-small"> <i class="fas fa-chevron-left"></i> </span>
-  <span>Назад</span>
-</a>
+<a class="button is-link mb-3" href="blanks"> <span class="icon is-small"> <i class="fas fa-chevron-left"></i> </span> <span>Назад</span> </a>
 
 <div class="level">
   <div class="level-left">
@@ -130,10 +127,10 @@
       <tbody>
         {#each $templateList as task, i (task.id)}
           <tr>
-            <!--            <th><a class="theme-link" href="{`themes-and-tasks/${id}/${task.id}`}">{task.id}</a></th>-->
-            <!--            <th><a class="theme-link" href="{`themes-and-tasks/${id}/${task.id}`}">{task.theme_id}</a></th>-->
-            <th><a class="theme-link" href="{`themes-and-tasks/${id}/${task.id}`}">{task.position}</a></th>
-            <th><a class="theme-link" href="{`themes-and-tasks/${id}/${task.id}`}">{task.template[0]}</a></th>
+            <!--            <th><a class="theme-link" href="{`blanks/${id}/${task.id}`}">{task.id}</a></th>-->
+            <!--            <th><a class="theme-link" href="{`blanks/${id}/${task.id}`}">{task.theme_id}</a></th>-->
+            <th><a class="theme-link" href="{`blanks/${id}/${task.id}`}">{task.position}</a></th>
+            <th><a class="theme-link" href="{`blanks/${id}/${task.id}`}">{task.template[0]}</a></th>
             <td
               class="button is-primary is-small ml-2 mt-1"
               on:click="{async () => {

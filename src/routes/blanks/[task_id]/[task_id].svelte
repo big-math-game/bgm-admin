@@ -57,7 +57,7 @@
   })
 </script>
 
-<a class="button is-link mb-3" href="{`themes-and-tasks/${$task.theme_id}`}">
+<a class="button is-link mb-3" href="{`blanks/${$task.theme_id}`}">
   <span class="icon is-small"> <i class="fas fa-chevron-left"></i> </span>
   <span>Назад</span>
 </a>
