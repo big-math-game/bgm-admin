@@ -8,19 +8,19 @@
   let themes
   $: themes = $themesList
   let editThemeWindow: boolean = false
-  let searchTerm: string = ''.toLowerCase()
+  let searchTerm: string = ''
   let themeData: string = ''
-  let selectedIndex: number = 0
-  let searchProperties: string[] = ['name', 'description']
-  let selectedProperty: string = ''
+  // let selectedIndex: number = 0
+  // let searchProperties = [{name: 'Имя бланка', value: 'name'}]
+  // let selectedProperty: string = ''
 
   let filteredList
   $: filteredList = themes
-    .filter((item) => item[selectedProperty ? selectedProperty : searchProperties[0]].indexOf(searchTerm) !== -1)
+    .filter((item) => item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1)
     .sort((a, b) => {
-      if (a.name > b.name) return 1
-      if (b.name < a.name) return -1
-      return a.name - b.name
+      if (a.value > b.value) return 1
+      if (b.value < a.value) return -1
+      return a.value - b.value
     })
 
   onMount(async () => {
@@ -29,7 +29,7 @@
 </script>
 
 <svelte:head>
-  <title>Темы и шаблоны задач</title>
+  <title>Бланки</title>
 </svelte:head>
 
 <div class="level">
@@ -43,7 +43,7 @@
   </div>
 </div>
 
-<div class="tabs">
+<!--<div class="tabs">
   <ul>
     {#each searchProperties as property, i (i)}
       <li class:is-active="{i === selectedIndex}">
@@ -51,12 +51,12 @@
           href=":"
           on:click|preventDefault="{() => {
             selectedIndex = i
-            selectedProperty = property
-          }}">{property}</a>
+            selectedProperty = property.value
+          }}">{property.name}</a>
       </li>
     {/each}
   </ul>
-</div>
+</div>-->
 
 <p class="control has-icons-left mb-3">
   <label><input class="input is-primary" type="text" placeholder="Search" bind:value="{searchTerm}" /></label>
@@ -68,9 +68,9 @@
     <thead>
       <tr>
         <!--        <th title="Theme id"><abbr title="Id">Id</abbr></th>-->
-        <th title="Сложность темы"><abbr>Сложность темы</abbr></th>
-        <th title="Имя темы"><abbr>Имя темы</abbr></th>
-        <th title="Описание темы"><abbr>Описание темы</abbr></th>
+        <!--        <th title="Сложность темы"><abbr>Сложность темы</abbr></th>-->
+        <th title="Имя темы"><abbr>Имя бланка</abbr></th>
+        <th title="Описание темы"><abbr>Описание бланка</abbr></th>
       </tr>
     </thead>
 
@@ -78,7 +78,7 @@
       {#each filteredList as theme, i (theme.id)}
         <tr>
           <!--          <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.id}</a></th>-->
-          <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.level}</a></th>
+          <!--        <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.level}</a></th>-->
           <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.name}</a></th>
           <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.description}</a></th>
           <td
