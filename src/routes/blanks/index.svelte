@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { goto } from '@sapper/app'
   import { onMount } from 'svelte'
   import { getThemeList } from '../../services/api-requests/api-requests'
   import { themesList } from '../../store/store'
@@ -35,11 +36,11 @@
 <div class="level">
   <div class="level-left">
     <div class="level-item">
-      <h1 class="title is-4">Темы и шаблоны задач</h1>
+      <h1 class="title is-4">Бланки</h1>
     </div>
   </div>
   <div class="level-right">
-    <div class="level-item"><a href="create-theme" class="button is-primary">Добавить тему</a></div>
+    <div class="level-item"><a href="create-blank" class="button is-primary">Добавить бланк</a></div>
   </div>
 </div>
 
@@ -59,11 +60,11 @@
 </div>-->
 
 <p class="control has-icons-left mb-3">
-  <label><input class="input is-primary" type="text" placeholder="Search" bind:value="{searchTerm}" /></label>
+  <label><input class="input is-primary" type="text" placeholder="Введите имя бланка" bind:value="{searchTerm}" /></label>
   <span class="icon is-left"> <i class="fas fa-search" aria-hidden="true"></i> </span>
 </p>
 
-<div class="table-container">
+<div class="table-container mb-4">
   <table class="table is-bordered">
     <thead>
       <tr>
@@ -76,19 +77,23 @@
 
     <tbody>
       {#each filteredList as theme, i (theme.id)}
-        <tr>
+        <tr
+          class="theme-link"
+          on:click="{() => {
+            goto(`blanks/${theme.id}`)
+          }}">
           <!--          <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.id}</a></th>-->
           <!--        <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.level}</a></th>-->
-          <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.name}</a></th>
-          <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.description}</a></th>
-          <td
-            class="button is-primary is-small ml-2 mt-1"
-            on:click="{() => {
-              themeData = theme
-              editThemeWindow = true
-            }}">
-            <span class="icon"> <i class="fas fa-lg fa-edit"></i> </span>
-          </td>
+          <th>{theme.name}</th>
+          <th>{theme.description}</th>
+          <!--          <td-->
+          <!--            class="button is-primary is-small ml-2 mt-1"-->
+          <!--            on:click="{() => {-->
+          <!--              themeData = theme-->
+          <!--              editThemeWindow = true-->
+          <!--            }}">-->
+          <!--            <span class="icon"> <i class="fas fa-lg fa-edit"></i> </span>-->
+          <!--          </td>-->
           <!--<td-->
           <!--class="button is-danger button-delete is-small ml-2 mt-1"-->
           <!--on:click="{() => {-->
@@ -114,6 +119,10 @@
   }
 
   .theme-link {
-    color: #333333;
+    cursor: pointer;
+  }
+
+  .theme-link:hover {
+    background: #e3e3e3;
   }
 </style>

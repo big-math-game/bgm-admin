@@ -39,7 +39,7 @@ export const createTheme = async (name: string, description?: string) => {
       description: description
     })
   )
-  return res.result
+  return res
 }
 
 export const modifyTheme = async (id: string, name: string, description: string, level?: number) => {
