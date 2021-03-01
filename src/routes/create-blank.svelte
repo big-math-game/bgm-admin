@@ -24,7 +24,7 @@
         if (res.result) {
           name = ''
           description = ''
-          goto(`blanks/${res.result.id}`)
+          goto(`blanks/${res.result.name}`)
         } else {
           error = true
         }

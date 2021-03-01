@@ -80,7 +80,7 @@
         <tr
           class="theme-link"
           on:click="{() => {
-            goto(`blanks/${theme.id}`)
+            goto(`blanks/${theme.name}`)
           }}">
           <!--          <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.id}</a></th>-->
           <!--        <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.level}</a></th>-->

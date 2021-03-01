@@ -3,7 +3,24 @@
   import Id from '../../services/randomUID'
 
   export async function preload({ params }) {
-    const { id } = params
+    const { name } = params
+    console.log(name)
+
+    const resTheme = await this.fetch(url, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        method: 'MathAdminAPI.GetThemeList',
+        params: [{}],
+        id: Id()
+      })
+    })
+
+    const themesData = await resTheme.json()
+    const themeId = themesData.result.find((item) => item.name === name)
 
     const res = await this.fetch(url, {
       method: 'POST',
@@ -13,7 +30,7 @@
       },
       body: JSON.stringify({
         method: 'MathAdminAPI.GetTheme',
-        params: [{ theme_id: id }],
+        params: [{ theme_id: themeId.id }],
         id: Id()
       })
     })
@@ -163,6 +180,7 @@
   abbr {
     text-decoration: none;
   }
+
   .theme-link {
     color: #333333;
   }
