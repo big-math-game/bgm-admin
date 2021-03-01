@@ -1,23 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { getThemeList } from '../services/api-requests/api-requests'
 
   let tasksData = []
   let themeData = []
 
-  let date = new Date().toISOString().split('T')[1].split('.')[0]
-
-  onMount(() => {
-    tasksData = JSON.parse(localStorage.getItem('task'))
-    themeData = JSON.parse(localStorage.getItem('theme'))
-
-    console.log(location.host)
-
-    setInterval(() => {
-      date = new Date().toISOString().split('T')[1].split('.')[0]
-    }, 1000)
+  onMount(async () => {
+    themeData = await getThemeList()
   })
-  // let topic = ''
-  // let filteredTasks = []
 </script>
 
 <svelte:head>
@@ -25,23 +15,14 @@
 </svelte:head>
 
 <div class="dashboard mr-3">
-  <div class="level">
-    <div class="level-left">
-      <div class="level-item">
-        <div class="title has-text-primary">Dashboard</div>
-      </div>
-    </div>
-    <div class="level-right">
-      <div class="level-item"><button type="button" class="button is-small">{date}</button></div>
-    </div>
-  </div>
+  <h3 class="title is-3">Статистика</h3>
 
   <div class="columns is-multiline">
-    {#if tasksData !== null}
+    {#if themeData !== null}
       <div class="column is-3">
         <div class="box notification" style="height: 100%">
-          <div class="heading">Total tasks</div>
-          <div class="title">{tasksData.length}</div>
+          <div class="heading">Всего бланков</div>
+          <div class="title">{themeData.length}</div>
         </div>
       </div>
 
