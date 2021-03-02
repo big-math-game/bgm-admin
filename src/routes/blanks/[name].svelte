@@ -4,7 +4,6 @@
 
   export async function preload({ params }) {
     const { name } = params
-    console.log(name)
 
     const resTheme = await this.fetch(url, {
       method: 'POST',
@@ -35,144 +34,204 @@
       })
     })
 
-    const themeData = await res.json()
-    return { themeData }
+    const blankData = await res.json()
+    const urlName = name
+    return { blankData, urlName }
   }
 </script>
 
 <script>
+  import { goto } from '@sapper/app'
   import { onMount } from 'svelte'
-  import { templateList, theme } from '../../store/store'
-  import { generateTasksForTheme, getTemplate, getTemplateList, getTheme, getThemeList } from '../../services/api-requests/api-requests'
+  import { templateList, blank } from '../../store/store'
+  import { getTemplateList, getThemeList, modifyTheme } from '../../services/api-requests/api-requests'
   import Modal from '../../components/common/modal/Modal.svelte'
-  import EditTaskWindow from '../../components/edit-task-window/EditTaskWindow.svelte'
+  import CreateTemplate from '../../components/create-template/CreateTemplate.svelte'
 
-  export let themeData = { result: {} }
-  let themes = []
-  let helpMessage = false
-  let helpText = ''
+  export let blankData = { result: {} }
+  export let urlName
+  let blanks = []
+  // let helpMessage = false;
+  // let helpText = '';
   let error = false
 
-  const { id } = themeData.result ? themeData.result : {}
+  const { id, name, description } = blankData.result ? blankData.result : {}
 
-  let selectedTask = {}
-  let editTaskWindow = false
+  // let selectedTask = {};
+  let templateWindow = false
+  let inputName = ''
+  let inputDescription = ''
 
+  /*
   const generateTasks = async () => {
-    const res = await generateTasksForTheme(id)
+    const res = await generateTasksForTheme(id);
     if (res.result) {
-      error = false
-      helpText = `Сгенерировано ${res.result} задач`
-      helpMessage = true
+      error = false;
+      helpText = `Сгенерировано ${res.result} задач`;
+      helpMessage = true;
       setTimeout(() => {
-        helpMessage = false
-      }, 2000)
-      theme.set(await getTheme(id))
+        helpMessage = false;
+      }, 2000);
+      blank.set(await getTheme(id));
     } else {
-      helpMessage = true
-      error = true
-      helpText = res.error
+      helpMessage = true;
+      error = true;
+      helpText = res.error;
     }
-  }
+  };
+   */
 
   onMount(async () => {
     templateList.set(await getTemplateList(id))
-    theme.set(themeData.result ? themeData.result : {})
-    themes = await getThemeList()
+    blanks = await getThemeList()
+    blank.set(blanks.find((item) => item.name === urlName))
+    inputName = $blank.name
+    inputDescription = $blank.description
+
+    console.log($templateList)
   })
 </script>
 
 <a class="button is-link mb-3" href="blanks"> <span class="icon is-small"> <i class="fas fa-chevron-left"></i> </span> <span>Назад</span> </a>
 
-<div class="level">
-  <div class="level-left">
-    <div class="level-item">
-      <h1 class="title">Описание темы</h1>
-    </div>
-    {#if $theme.id}
+{#if $blank.id}
+  <div class="level">
+    <div class="level-left">
       <div class="level-item">
-        <button type="button" class="button is-primary" on:click="{generateTasks}">Сгенерировать задачи</button>
-        {#if helpMessage}
-          <p class="{`help ${error ? 'has-text-danger' : 'has-text-success'} is-size-3`}">&nbsp; {helpText}</p>
-        {/if}
+        <h1 class="title">Бланк: {$blank.name}</h1>
       </div>
-    {/if}
-  </div>
-</div>
-
-<hr />
-
-<ul>
-  {#if $theme.id}
-    <li>id темы - {$theme.id}</li>
-    <li>Имя темы - {$theme.name}</li>
-    <li>Описание темы - {$theme.description}</li>
-    <li>Уровень темы - {$theme.level}</li>
-    <li>Количество шаблонов в теме - {$theme.template_count}</li>
-    <li>Количество задач по шаблонам (должно быть сгенерировано) - {$theme.template_task_count}</li>
-    <li>Количество реально сгенерированных задач - {$theme.real_task_count}</li>
-  {:else}
-    <li>Добавьте шаблоны задач</li>
-  {/if}
-</ul>
-
-<hr />
-
-<div class="level">
-  <div class="level-left">
-    <div class="level-item">
-      <h3 class="title is-3">Шаблоны темы</h3>
+    </div>
+    <div class="level-right">
+      <div class="level-item"><button class="button is-primary">Опубликовать</button></div>
+      <div class="level-item">
+        <button
+          on:click="{() => {
+            templateWindow = true
+          }}"
+          class="button is-primary">Создать шаблон задачи</button>
+      </div>
     </div>
   </div>
-  <div class="level-right">
-    <div class="level-item"><a href="add-task" class="button is-primary">Добавить шаблон задачи</a></div>
+
+  <form
+    class="form-horizontal"
+    enctype="multipart/form-data"
+    on:submit|preventDefault="{async () => {
+      if (blankData.id && inputName && inputDescription) {
+        if (inputName !== $blank.name || inputDescription !== $blank.description) {
+          const res = await modifyTheme($blank.id, inputName, inputDescription)
+          if (res) {
+            goto(`blanks/${inputName}`)
+            window.location.reload()
+          }
+        }
+      }
+    }}">
+    <fieldset class="fieldset mr-2">
+      <!-- Text input-->
+      <div class="field mb-5">
+        <label class="label" for="theme-name">Имя шаблона</label>
+        <div class="control">
+          <input id="theme-name" name="answer" type="text" placeholder="Введите имя шаблона" class="input" bind:value="{inputName}" required />
+        </div>
+      </div>
+
+      <!-- Textarea -->
+      <div class="field mb-5">
+        <label class="label" for="theme-description">Описание бланка</label>
+        <div class="control">
+          <textarea
+            class="textarea"
+            id="theme-description"
+            name="task"
+            placeholder="Введите описание бланка"
+            bind:value="{inputDescription}"
+            required></textarea>
+        </div>
+      </div>
+
+      {#if inputName !== $blank.name || inputDescription !== $blank.description}
+        <!-- Button -->
+        <div class="field mb-5">
+          <label class="label" for="submit"></label>
+          <div class="control"><button id="submit" name="submit" type="submit" class="button is-success">Сохранить</button></div>
+        </div>
+      {/if}
+    </fieldset>
+  </form>
+{:else}
+  <div class="level">
+    <div class="level-left">
+      <div class="level-item">
+        <h1 class="title is-size-3 has-text-danger">Добавьте шаблоны задач! для бланка {$blank.name}</h1>
+      </div>
+    </div>
+    <div class="level-right">
+      <div class="level-item">
+        <button
+          on:click="{() => {
+            templateWindow = true
+          }}"
+          class="button is-primary">Создать шаблон задачи</button>
+      </div>
+    </div>
   </div>
-</div>
+{/if}
 
-<div class="table-container">
-  <table class="table is-bordered">
-    <thead>
-      <tr>
-        <!--        <th title="Task id"><abbr title="Id">Id</abbr></th>-->
-        <!--        <th title="Theme"><abbr>Theme Id</abbr></th>-->
-        <th title="Позиция"><abbr>Позиция</abbr></th>
-        <th title="Содержание"><abbr>Содержание</abbr></th>
-      </tr>
-    </thead>
+{#if $blank.id}
+  <hr />
 
-    {#if $templateList}
-      <tbody>
-        {#each $templateList as task, i (task.id)}
-          <tr>
-            <!--            <th><a class="theme-link" href="{`blanks/${id}/${task.id}`}">{task.id}</a></th>-->
-            <!--            <th><a class="theme-link" href="{`blanks/${id}/${task.id}`}">{task.theme_id}</a></th>-->
-            <th><a class="theme-link" href="{`blanks/${id}/${task.id}`}">{task.position}</a></th>
-            <th><a class="theme-link" href="{`blanks/${id}/${task.id}`}">{task.template[0]}</a></th>
-            <td
-              class="button is-primary is-small ml-2 mt-1"
-              on:click="{async () => {
-                selectedTask = await getTemplate(task.id)
-                editTaskWindow = true
+  <h3 class="title is-3">Шаблоны задач бланка</h3>
+
+  <div class="table-container">
+    <table class="table is-bordered">
+      <thead>
+        <tr>
+          <!--        <th title="Task id"><abbr title="Id">Id</abbr></th>-->
+          <!--        <th title="Theme"><abbr>Theme Id</abbr></th>-->
+          <th title="Позиция"><abbr>Позиция</abbr></th>
+          <th title="Содержание"><abbr>Содержание</abbr></th>
+        </tr>
+      </thead>
+
+      {#if $templateList}
+        <tbody>
+          {#each $templateList as task, i (task.id)}
+            <tr
+              class="theme-link"
+              on:click="{() => {
+                goto(`blanks/${name}/${task.id}`)
               }}">
-              <span class="icon"> <i class="fas fa-lg fa-edit"></i> </span>
-            </td>
-            <!--<td-->
-            <!--class="button is-danger button-delete is-small ml-2 mt-1"-->
-            <!--on:click="{() => {-->
-            <!--deleteTaskWindow = true-->
-            <!--}}">-->
-            <!--<span class="icon"> <i class="fas fa-times"></i> </span>-->
-            <!--</td>-->
-          </tr>
-        {/each}
-      </tbody>
-    {/if}
-  </table>
-</div>
+              <!--            <th><a class="theme-link" href="{`blanks/${id}/${task.id}`}">{task.id}</a></th>-->
+              <!--            <th><a class="theme-link" href="{`blanks/${id}/${task.id}`}">{task.theme_id}</a></th>-->
+              <th>{task.position}</th>
+              <th>{task.template[0]}</th>
+              <!--            <td-->
+              <!--              class="button is-primary is-small ml-2 mt-1"-->
+              <!--              on:click="{async () => {-->
+              <!--                  selectedTask = await getTemplate(task.id)-->
+              <!--                  editTaskWindow = true-->
+              <!--                }}">-->
+              <!--              <span class="icon"> <i class="fas fa-lg fa-edit"></i> </span>-->
+              <!--            </td>-->
+              <!--<td-->
+              <!--class="button is-danger button-delete is-small ml-2 mt-1"-->
+              <!--on:click="{() => {-->
+              <!--deleteTaskWindow = true-->
+              <!--}}">-->
+              <!--<span class="icon"> <i class="fas fa-times"></i> </span>-->
+              <!--</td>-->
+            </tr>
+          {/each}
+        </tbody>
+      {/if}
+    </table>
+  </div>
+{/if}
 
-{#if editTaskWindow}
-  <Modal bind:active="{editTaskWindow}">
-    <EditTaskWindow close="{editTaskWindow}" bind:selectedTask bind:themes />
+{#if templateWindow}
+  <Modal bind:active="{templateWindow}">
+    <CreateTemplate blank="{$blank}" />
   </Modal>
 {/if}
 
@@ -182,6 +241,10 @@
   }
 
   .theme-link {
-    color: #333333;
+    cursor: pointer;
+  }
+
+  .theme-link:hover {
+    background: #e3e3e3;
   }
 </style>
