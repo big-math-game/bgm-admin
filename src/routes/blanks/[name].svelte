@@ -117,9 +117,9 @@
     class="form-horizontal"
     enctype="multipart/form-data"
     on:submit|preventDefault="{async () => {
-      if (blankData.id && inputName && inputDescription) {
-        if (inputName !== $blank.name || inputDescription !== $blank.description) {
-          const res = await modifyTheme($blank.id, inputName, inputDescription)
+      if (blankData.id && inputName) {
+        if (inputName !== $blank.name) {
+          const res = await modifyTheme($blank.id, inputName)
           if (res) {
             goto(`blanks/${inputName}`)
             window.location.reload()
@@ -130,13 +130,13 @@
     <fieldset class="fieldset mr-2">
       <!-- Text input-->
       <div class="field mb-5">
-        <label class="label" for="theme-name">Имя шаблона</label>
+        <label class="label" for="theme-name">Имя бланка</label>
         <div class="control">
           <input id="theme-name" name="answer" type="text" placeholder="Введите имя шаблона" class="input" bind:value="{inputName}" required />
         </div>
       </div>
 
-      <!-- Textarea -->
+      <!-- Textarea
       <div class="field mb-5">
         <label class="label" for="theme-description">Описание бланка</label>
         <div class="control">
@@ -149,6 +149,7 @@
             required></textarea>
         </div>
       </div>
+      -->
 
       {#if inputName !== $blank.name || inputDescription !== $blank.description}
         <!-- Button -->
