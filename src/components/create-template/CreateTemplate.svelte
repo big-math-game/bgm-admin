@@ -23,10 +23,10 @@
 
   const removeField = () => {
     fields.pop()
-    description.pop()
-    answer.pop()
     fields = [...fields]
+    description.pop()
     description = [...description]
+    answer.pop()
     answer = [...answer]
   }
 
@@ -114,7 +114,7 @@
       <div class="field mb-5">
         <label class="label" for="submit"></label>
         <div class="control">
-          <button id="submit" name="submit" type="submit" class="button is-success">Создать </button>
+          <button id="submit" name="submit" type="submit" class="button is-success">Создать</button>
           {#if taskCreated}
             <p transition:fade="{{ duration: 250 }}" class="{`help ${error ? 'has-text-danger' : 'has-text-success'} is-size-3`}">{helpText}</p>
           {/if}
