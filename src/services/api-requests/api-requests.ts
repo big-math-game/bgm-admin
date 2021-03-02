@@ -33,16 +33,15 @@ export const generateTasksForTheme = async (themeId: string) => {
 }
 
 export const createTheme = async (name: string, description?: string) => {
-  const res = await createApiRequest(
+  return await createApiRequest(
     requestOptions('MathAdminAPI.ModifyTheme', {
       name: name,
       description: description
     })
   )
-  return res
 }
 
-export const modifyTheme = async (id: string, name: string, description: string, level?: number) => {
+export const modifyTheme = async (id: string, name: string, description?: string, level?: number) => {
   const res = await createApiRequest(
     requestOptions('MathAdminAPI.ModifyTheme', {
       id: id,
