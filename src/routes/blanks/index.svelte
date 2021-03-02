@@ -40,7 +40,7 @@
     </div>
   </div>
   <div class="level-right">
-    <div class="level-item"><a href="create-blank" class="button is-primary">Добавить бланк</a></div>
+    <div class="level-item"><a href="create-blank" class="button is-primary">Создать бланк</a></div>
   </div>
 </div>
 
