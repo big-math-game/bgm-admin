@@ -3,14 +3,14 @@
   import { onMount } from 'svelte'
   import { getThemeList } from '../../services/api-requests/api-requests'
   import { themesList } from '../../store/store'
-  import Modal from '../../components/common/modal/Modal.svelte'
-  import EditThemeModalWindow from '../../components/edit-theme-modal-window/EditThemeModalWindow.svelte'
+  // import Modal from '../../components/common/modal/Modal.svelte'
+  // import EditThemeModalWindow from '../../components/edit-theme-modal-window/EditThemeModalWindow.svelte'
 
   let themes
   $: themes = $themesList
-  let editThemeWindow: boolean = false
+  // let editThemeWindow: boolean = false
   let searchTerm: string = ''
-  let themeData: string = ''
+  // let themeData: string = ''
   // let selectedIndex: number = 0
   // let searchProperties = [{name: 'Имя бланка', value: 'name'}]
   // let selectedProperty: string = ''
@@ -106,12 +106,6 @@
     </tbody>
   </table>
 </div>
-
-{#if editThemeWindow}
-  <Modal bind:active="{editThemeWindow}">
-    <EditThemeModalWindow bind:close="{editThemeWindow}" bind:themeData />
-  </Modal>
-{/if}
 
 <style>
   abbr {
