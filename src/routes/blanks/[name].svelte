@@ -47,6 +47,7 @@
   import { getTemplateList, getThemeList, modifyTheme } from '../../services/api-requests/api-requests'
   import Modal from '../../components/common/modal/Modal.svelte'
   import CreateTemplate from '../../components/create-template/CreateTemplate.svelte'
+  import PublishWindow from '../../components/publish-window/PublishWindow.svelte'
 
   export let blankData = { result: {} }
   export let urlName
@@ -59,6 +60,8 @@
 
   // let selectedTask = {};
   let templateWindow = false
+  let publishWindow = false
+  let publish = false
   let inputName = ''
   let inputDescription = ''
 
@@ -87,8 +90,7 @@
     blank.set(blanks.find((item) => item.name === urlName))
     inputName = $blank.name
     inputDescription = $blank.description
-
-    console.log($templateList)
+    publish = $templateList.length === 8
   })
 </script>
 
@@ -102,13 +104,23 @@
       </div>
     </div>
     <div class="level-right">
-      <div class="level-item"><button class="button is-primary">Опубликовать</button></div>
+      {#if publish}
+        <div class="level-item">
+          <button
+            class="button is-primary"
+            on:click="{() => {
+              publishWindow = true
+            }}">Опубликовать
+          </button>
+        </div>
+      {/if}
       <div class="level-item">
         <button
           on:click="{() => {
             templateWindow = true
           }}"
-          class="button is-primary">Создать шаблон задачи</button>
+          class="button is-primary">Создать шаблон задачи
+        </button>
       </div>
     </div>
   </div>
@@ -173,7 +185,8 @@
           on:click="{() => {
             templateWindow = true
           }}"
-          class="button is-primary">Создать шаблон задачи</button>
+          class="button is-primary">Создать шаблон задачи
+        </button>
       </div>
     </div>
   </div>
@@ -182,7 +195,18 @@
 {#if $blank.id}
   <hr />
 
-  <h3 class="title is-3">Шаблоны задач бланка</h3>
+  <h3 class="title is-3 is-small">
+    Шаблоны задач бланка
+    {$templateList.length}
+    из 8&nbsp;
+    {#if $templateList.length === 8}
+      <span class="icon has-text-success"> <i class="fas fa-check"></i> </span>
+    {:else}
+      <span title="Добавьте больше шаблонов что бы опубликовать бланк" class="icon is-size-4 has-text-info">
+        <i class="fas fa-info-circle"></i>
+      </span>
+    {/if}
+  </h3>
 
   <div class="table-container">
     <table class="table is-bordered">
@@ -233,6 +257,12 @@
 {#if templateWindow}
   <Modal bind:active="{templateWindow}">
     <CreateTemplate blank="{$blank}" />
+  </Modal>
+{/if}
+
+{#if publishWindow}
+  <Modal bind:active="{publishWindow}">
+    <PublishWindow themeID="{$blank.id}" />
   </Modal>
 {/if}
 
