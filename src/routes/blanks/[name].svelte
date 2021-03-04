@@ -85,7 +85,8 @@
    */
 
   onMount(async () => {
-    templateList.set(await getTemplateList(id))
+    const res = await getTemplateList(id)
+    templateList.set(res ? res : [])
     blanks = await getThemeList()
     blank.set(blanks.find((item) => item.name === urlName))
     inputName = $blank.name
@@ -192,7 +193,7 @@
   </div>
 {/if}
 
-{#if $blank.id}
+{#if $templateList}
   <hr />
 
   <h3 class="title is-3 is-small">
