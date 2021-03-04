@@ -118,11 +118,9 @@
   class="form-horizontal"
   enctype="multipart/form-data"
   on:submit|preventDefault="{async () => {
-    if ($task.id && theme && description.length > 0 && answer.length > 0) {
-      const res = await modifyTemplate($task.id, theme, description, answer, Number(position), image ? image : '')
-      console.log(res)
-      window.location.reload()
-    }
+    const res = await modifyTemplate($task.id, theme, description, answer, Number(position), image)
+    console.log(res)
+    // window.location.reload()
   }}">
   <fieldset class="fieldset mr-2">
     <!-- Select Basic
