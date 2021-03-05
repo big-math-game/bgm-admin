@@ -2,16 +2,16 @@
   import { fade } from 'svelte/transition'
   import { createListsForAll, generateTasksForTheme } from '../../services/api-requests/api-requests'
 
-  export let themeID: string = ''
+  export let blankID: string = ''
   let listName: string = ''
   let helpMessage: boolean = false
   let helpText: string = ''
   let error = false
 
   const submitHandler = async () => {
-    const genRes = await generateTasksForTheme(themeID)
+    const genRes = await generateTasksForTheme(blankID)
     console.log(genRes.result)
-    const res = await createListsForAll(themeID, listName)
+    const res = await createListsForAll(blankID, listName)
     if (res.result) {
       console.log(res.result)
       window.location.reload()

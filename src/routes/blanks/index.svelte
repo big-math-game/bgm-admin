@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import { goto } from '@sapper/app'
   import { onMount } from 'svelte'
   import { getThemeList } from '../../services/api-requests/api-requests'
@@ -9,7 +9,7 @@
   let themes
   $: themes = $themesList
   // let editThemeWindow: boolean = false
-  let searchTerm: string = ''
+  let searchTerm = ''
   // let themeData: string = ''
   // let selectedIndex: number = 0
   // let searchProperties = [{name: 'Имя бланка', value: 'name'}]
@@ -78,7 +78,7 @@
     <tbody>
       {#each filteredList as theme, i (theme.id)}
         <tr
-          class="theme-link"
+          class="blank-link"
           on:click="{() => {
             goto(`blanks/${theme.name}`)
           }}">
@@ -112,7 +112,7 @@
     text-decoration: none;
   }
 
-  .theme-link {
+  .blank-link {
     cursor: pointer;
   }
 
@@ -120,7 +120,7 @@
     width: 100%;
   }
 
-  .theme-link:hover {
+  .blank-link:hover {
     background: #e3e3e3;
   }
 </style>

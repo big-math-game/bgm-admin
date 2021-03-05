@@ -1,38 +1,23 @@
 <script context="module">
-  import { url } from '../../../requestsUrl'
   import Id from '../../../services/randomUID'
 
   export async function preload({ params }) {
     const { task_id } = params
 
-    const res = await this.fetch(url, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        method: 'MathAdminAPI.GetTemplate',
-        params: [{ id: task_id }],
-        id: Id()
-      })
-    })
-
-    const taskData = await res.json()
-    return { taskData }
+    const taskId = task_id
+    return { taskId }
   }
 </script>
 
 <script>
-  import { getTheme, modifyTemplate } from '../../../services/api-requests/api-requests'
+  import { getTemplate, getTheme, modifyTemplate } from '../../../services/api-requests/api-requests'
   import { task, blank } from '../../../store/store'
   import { onMount } from 'svelte'
 
-  export let taskData = { result: {} }
-  const { id } = taskData.result
+  export let taskId = ''
   //let helpMessage = false
   //let helpText = ''
-  let error = false
+  //let error = false
 
   // let taskSaved = false
   let theme = ''
@@ -87,7 +72,7 @@
    */
 
   onMount(async () => {
-    task.set(taskData.result)
+    task.set(await getTemplate(taskId))
     blank.set(await getTheme($task.theme_id))
 
     theme = $task.theme_id

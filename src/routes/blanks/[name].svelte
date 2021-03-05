@@ -1,42 +1,9 @@
 <script context="module">
-  import { url } from '../../requestsUrl'
-  import Id from '../../services/randomUID'
-
   export async function preload({ params }) {
     const { name } = params
 
-    const resTheme = await this.fetch(url, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        method: 'MathAdminAPI.GetThemeList',
-        params: [{}],
-        id: Id()
-      })
-    })
-
-    const themesData = await resTheme.json()
-    const themeId = themesData.result.find((item) => item.name === name)
-
-    const res = await this.fetch(url, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        method: 'MathAdminAPI.GetTheme',
-        params: [{ theme_id: themeId.id }],
-        id: Id()
-      })
-    })
-
-    const blankData = await res.json()
     const urlName = name
-    return { blankData, urlName }
+    return { urlName }
   }
 </script>
 
@@ -49,15 +16,11 @@
   import CreateTemplate from '../../components/create-template/CreateTemplate.svelte'
   import PublishWindow from '../../components/publish-window/PublishWindow.svelte'
 
-  export let blankData = { result: {} }
   export let urlName
   let blanks = []
   // let helpMessage = false;
   // let helpText = '';
-  let error = false
-
-  const { id, name, description } = blankData.result ? blankData.result : {}
-
+  // let error = false
   // let selectedTask = {};
   let templateWindow = false
   let publishWindow = false
@@ -85,10 +48,11 @@
    */
 
   onMount(async () => {
-    const res = await getTemplateList(id)
-    templateList.set(res ? res : [])
     blanks = await getThemeList()
-    blank.set(blanks.find((item) => item.name === urlName))
+    const getBlank = blanks.find((item) => item.name === urlName)
+    blank.set(getBlank ? getBlank : {})
+    const res = await getTemplateList($blank.id)
+    templateList.set(res ? res : [])
     inputName = $blank.name
     inputDescription = $blank.description
     publish = $templateList.length === 8
@@ -130,7 +94,7 @@
     class="form-horizontal"
     enctype="multipart/form-data"
     on:submit|preventDefault="{async () => {
-      if (blankData.id && inputName) {
+      if ($blank.id && inputName) {
         if (inputName !== $blank.name) {
           const res = await modifyTheme($blank.id, inputName)
           if (res) {
@@ -143,9 +107,9 @@
     <fieldset class="fieldset mr-2">
       <!-- Text input-->
       <div class="field mb-5">
-        <label class="label" for="theme-name">Имя бланка</label>
+        <label class="label" for="blank-name">Имя бланка</label>
         <div class="control">
-          <input id="theme-name" name="answer" type="text" placeholder="Введите имя шаблона" class="input" bind:value="{inputName}" required />
+          <input id="blank-name" name="answer" type="text" placeholder="Введите имя шаблона" class="input" bind:value="{inputName}" required />
         </div>
       </div>
 
@@ -224,9 +188,9 @@
         <tbody>
           {#each $templateList as task, i (task.id)}
             <tr
-              class="theme-link"
+              class="blank-link"
               on:click="{() => {
-                goto(`blanks/${name}/${task.id}`)
+                goto(`blanks/${$blank.name}/${task.id}`)
               }}">
               <!--            <th><a class="theme-link" href="{`blanks/${id}/${task.id}`}">{task.id}</a></th>-->
               <!--            <th><a class="theme-link" href="{`blanks/${id}/${task.id}`}">{task.theme_id}</a></th>-->
@@ -263,7 +227,7 @@
 
 {#if publishWindow}
   <Modal bind:active="{publishWindow}">
-    <PublishWindow themeID="{$blank.id}" />
+    <PublishWindow blankID="{$blank.id}" />
   </Modal>
 {/if}
 
@@ -272,11 +236,11 @@
     text-decoration: none;
   }
 
-  .theme-link {
+  .blank-link {
     cursor: pointer;
   }
 
-  .theme-link:hover {
+  .blank-link:hover {
     background: #e3e3e3;
   }
 </style>
