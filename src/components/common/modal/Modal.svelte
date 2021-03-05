@@ -16,7 +16,7 @@
 <style>
   .modal-content {
     display: flex;
-    align-items: center;
+    /*align-items: center;*/
     justify-content: center;
   }
 </style>
