@@ -19,8 +19,8 @@
     class="form-horizontal"
     enctype="multipart/form-data"
     on:submit|preventDefault="{async () => {
-      if (name && description) {
-        const res = await createTheme(name, description)
+      if (name) {
+        const res = await createTheme(name)
         if (res.result) {
           name = ''
           description = ''
@@ -39,7 +39,7 @@
         </div>
       </div>
 
-      <!-- Textarea -->
+      <!-- Textarea
       <div class="field mb-5">
         <label class="label" for="theme-description">Описание бланка</label>
         <div class="control">
@@ -52,6 +52,7 @@
             required></textarea>
         </div>
       </div>
+      -->
 
       <!-- Button -->
       <div class="field mb-5">

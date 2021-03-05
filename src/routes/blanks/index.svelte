@@ -71,7 +71,7 @@
         <!--        <th title="Theme id"><abbr title="Id">Id</abbr></th>-->
         <!--        <th title="Сложность темы"><abbr>Сложность темы</abbr></th>-->
         <th title="Имя темы"><abbr>Имя бланка</abbr></th>
-        <th title="Описание темы"><abbr>Описание бланка</abbr></th>
+        <!--        <th title="Описание темы"><abbr>Описание бланка</abbr></th>-->
       </tr>
     </thead>
 
@@ -85,7 +85,7 @@
           <!--          <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.id}</a></th>-->
           <!--        <th><a class="theme-link" href="{`blanks/${theme.id}`}">{theme.level}</a></th>-->
           <th>{theme.name}</th>
-          <th>{theme.description}</th>
+          <!--          <th>{theme.description}</th>-->
           <!--          <td-->
           <!--            class="button is-primary is-small ml-2 mt-1"-->
           <!--            on:click="{() => {-->
@@ -114,6 +114,10 @@
 
   .theme-link {
     cursor: pointer;
+  }
+
+  table {
+    width: 100%;
   }
 
   .theme-link:hover {
